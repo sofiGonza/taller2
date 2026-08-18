@@ -8,7 +8,7 @@ class OrderProduct(BaseModel):
 
 
 class OrderCreate(BaseModel):
-    usuario: str
+    usuario: str = Field(..., min_length=2, max_length=100)
     productos: List[OrderProduct]
 
 
