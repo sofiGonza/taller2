@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechGear | Catálogo</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f4f7fb;
+            padding:40px;
+        }
+
+        .container{
+            max-width:1200px;
+            margin:auto;
+        }
+
+        .title{
+            text-align:center;
+            margin-bottom:40px;
+        }
+
+        .title h1{
+            color:#1e293b;
+            font-size:2.5rem;
+            margin-bottom:10px;
+        }
+
+        .title p{
+            color:#64748b;
+        }
+
+        .products-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:25px;
+        }
+
+        .card{
+            background:white;
+            border-radius:16px;
+            overflow:hidden;
+            box-shadow:0 4px 15px rgba(0,0,0,.08);
+            transition:.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 10px 25px rgba(0,0,0,.15);
+        }
+
+        .card-header{
+            background:linear-gradient(
+                135deg,
+                #2563eb,
+                #1d4ed8
+            );
+            color:white;
+            padding:20px;
+        }
+
+        .card-header h2{
+            font-size:1.2rem;
+        }
+
+        .card-body{
+            padding:20px;
+        }
+
+        .description{
+            color:#475569;
+            margin-bottom:20px;
+            line-height:1.5;
+        }
+
+        .info{
+            margin-bottom:10px;
+            color:#334155;
+        }
+
+        .info strong{
+            color:#0f172a;
+        }
+
+        .price{
+            margin-top:15px;
+            font-size:1.3rem;
+            font-weight:bold;
+            color:#16a34a;
+        }
+
+        .stock{
+            display:inline-block;
+            margin-top:10px;
+            background:#dcfce7;
+            color:#166534;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:.9rem;
+        }
+
+        .empty{
+            text-align:center;
+            background:white;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0 4px 15px rgba(0,0,0,.08);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="title">
+        <h1>🖥️ TechGear</h1>
+        <p>Catálogo de Hardware y Accesorios Tecnológicos</p>
+    </div>
+
+    {% if products %}
+
+    <div class="products-grid">
+
+        {% for product in products %}
+
+        <div class="card">
+
+            <div class="card-header">
+                <h2>{{ product.nombre }}</h2>
+            </div>
+
+            <div class="card-body">
+
+                <p class="description">
+                    {{ product.descripcion }}
+                </p>
+
+                <p class="info">
+                    <strong>Marca:</strong>
+                    {{ product.marca }}
+                </p>
+
+                <p class="info">
+                    <strong>Categoría:</strong>
+                    {{ product.categoria }}
+                </p>
+
+                <div class="price">
+                    ${{ product.precio }}
+                </div>
+
+                <div class="stock">
+                    Stock: {{ product.stock }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty">
+        <h2>No hay productos disponibles</h2>
+        <p>Agrega productos desde la API de FastAPI.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

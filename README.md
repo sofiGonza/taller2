@@ -1,27 +1,54 @@
+## cómo iniciar cada servidor.
+# link desplegado de FastAPI
+https://taller2-7gm3.onrender.com
+
+
+# FastAPI
+
+cd techgear_api
+
+pip install -r requirements.txt
+
+uvicorn app.main:app --reload --port 8000
+Django
+
+
+## otra terminal:
+
+cd techgear_web
+
+pip install -r requirements.txt
+
+python manage.py migrate
+
+python manage.py runserver 8001
+
+
+
+FastAPI:
+http://127.0.0.1:8000
+
+Swagger:
+http://127.0.0.1:8000/docs
+
+Django:
+http://127.0.0.1:8001
+
 # Estructura del proyecto
 ```taller2/
 │
-├── backend/
+├── techgear_api/
 │   ├── app/
-│   │   ├── __init__.py
 │   │   ├── main.py
-│   │   │
 │   │   ├── database/
-│   │   │   ├── __init__.py
 │   │   │   └── connection.py
-│   │   │
 │   │   ├── schemas/
-│   │   │   ├── __init__.py
 │   │   │   ├── product.py
 │   │   │   └── order.py
-│   │   │
 │   │   ├── routes/
-│   │   │   ├── __init__.py
 │   │   │   ├── products.py
 │   │   │   └── orders.py
-│   │   │
 │   │   └── services/
-│   │       ├── __init__.py
 │   │       ├── product_service.py
 │   │       └── order_service.py
 │   │
@@ -29,7 +56,7 @@
 │   ├── .gitignore
 │   └── requirements.txt
 │
-├── frontend/
+├── techgear_web/
 │   ├── manage.py
 │   │
 │   ├── config/
@@ -44,9 +71,7 @@
 │       ├── templates/
 │       │   └── catalog/
 │       │       ├── base.html
-│       │       ├── home.html
-│       │       ├── products.html
-│       │       └── orders.html
+│       │       └── products.html
 │       │
 │       ├── __init__.py
 │       ├── admin.py
