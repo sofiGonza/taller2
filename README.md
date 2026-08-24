@@ -3,6 +3,10 @@
 https://taller2-7gm3.onrender.com
 
 
+# Documentacion en Swagger
+https://taller2-7gm3.onrender.com/docs
+
+
 # FastAPI
 
 cd techgear_api

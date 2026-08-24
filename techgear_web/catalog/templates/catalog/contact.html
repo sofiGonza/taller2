@@ -1,0 +1,266 @@
+{% extends "catalog/base.html" %}
+
+
+{% block title %}
+    Contacto | TechGear
+{% endblock %}
+
+
+{% block content %}
+
+<section class="contact-page">
+
+
+    <!-- ENCABEZADO -->
+
+    <div class="contact-header">
+
+        <span>
+            TECHGEAR STORE
+        </span>
+
+        <h1>
+            Contáctanos
+        </h1>
+
+        <p>
+            ¿Tienes alguna pregunta o necesitas asesoría?
+            Estamos aquí para ayudarte.
+        </p>
+
+    </div>
+
+
+    <div class="contact-container">
+
+
+        <!-- INFORMACIÓN DE LA EMPRESA -->
+
+        <div class="company-info">
+
+            <h2>
+                Información de TechGear
+            </h2>
+
+            <p class="company-description">
+                TechGear es una empresa especializada en
+                hardware, computadores y accesorios
+                tecnológicos. Nuestro objetivo es ofrecer
+                productos de calidad y brindar soluciones
+                tecnológicas para nuestros clientes.
+            </p>
+
+
+            <div class="info-item">
+
+                <div class="info-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <h3>
+                        Ubicación
+                    </h3>
+
+                    <p>
+                        Medellín, Antioquia, Colombia
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-icon">
+                    📞
+                </div>
+
+                <div>
+
+                    <h3>
+                        Teléfono
+                    </h3>
+
+                    <p>
+                        +57 300 123 4567
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-icon">
+                    ✉️
+                </div>
+
+                <div>
+
+                    <h3>
+                        Correo electrónico
+                    </h3>
+
+                    <p>
+                        contacto@techgear.com
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-icon">
+                    🕐
+                </div>
+
+                <div>
+
+                    <h3>
+                        Horario de atención
+                    </h3>
+
+                    <p>
+                        Lunes a viernes: 8:00 AM - 6:00 PM
+                    </p>
+
+                    <p>
+                        Sábados: 9:00 AM - 2:00 PM
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORMULARIO -->
+
+        <div class="contact-form-container">
+
+            <h2>
+                Envíanos un mensaje
+            </h2>
+
+            <p>
+                Completa el formulario y nos pondremos
+                en contacto contigo.
+            </p>
+
+
+            <form
+                method="POST"
+                action=""
+                class="contact-form"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="form-group">
+
+                    <label for="nombre">
+                        Nombre completo
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Ingresa tu nombre"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="correo">
+                        Correo electrónico
+                    </label>
+
+                    <input
+                        type="email"
+                        id="correo"
+                        name="correo"
+                        placeholder="ejemplo@correo.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="telefono">
+                        Teléfono
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="telefono"
+                        name="telefono"
+                        placeholder="Ingresa tu teléfono"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="asunto">
+                        Asunto
+                    </label>
+
+                    <input
+                        type="text"
+                        id="asunto"
+                        name="asunto"
+                        placeholder="¿En qué podemos ayudarte?"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="mensaje">
+                        Mensaje
+                    </label>
+
+                    <textarea
+                        id="mensaje"
+                        name="mensaje"
+                        rows="6"
+                        placeholder="Escribe tu mensaje..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="contact-button"
+                >
+                    Enviar mensaje
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,1123 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    background: #0f172a;
+    color: white;
+    padding: 20px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+
+.header-container {
+    width: 90%;
+    max-width: 1300px;
+    margin: auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+
+.nav {
+    display: flex;
+    gap: 25px;
+}
+
+
+.nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+
+.nav a:hover {
+    color: white;
+}
+
+
+/* =========================
+   CATALOGO
+========================= */
+
+.catalog {
+    width: 90%;
+    max-width: 1300px;
+    margin: 50px auto;
+}
+
+
+.catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    margin-bottom: 35px;
+}
+
+
+.subtitle {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+
+.catalog-header h1 {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+
+.description {
+    color: #64748b;
+    max-width: 600px;
+}
+
+
+.product-count {
+    background: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+
+    color: #64748b;
+}
+
+
+.product-count span {
+    color: #2563eb;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.products-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+
+    gap: 25px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.product-card {
+    background: white;
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.08);
+
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s;
+}
+
+
+.product-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 15px 35px rgba(15, 23, 42, 0.15);
+}
+
+
+/* =========================
+   IMAGEN
+========================= */
+
+.product-image {
+    height: 190px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 75px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #0ea5e9
+        );
+}
+
+
+/* =========================
+   CONTENIDO
+========================= */
+
+.product-content {
+    padding: 22px;
+}
+
+
+.category {
+    display: inline-block;
+
+    background: #dbeafe;
+    color: #1d4ed8;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    margin-bottom: 12px;
+}
+
+
+.product-content h2 {
+    font-size: 21px;
+
+    margin-bottom: 10px;
+
+    color: #111827;
+}
+
+
+.product-description {
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    min-height: 68px;
+}
+
+
+/* =========================
+   INFORMACION
+========================= */
+
+.product-info {
+    margin-top: 15px;
+
+    padding-top: 15px;
+
+    border-top:
+        1px solid #e2e8f0;
+
+    font-size: 14px;
+
+    color: #475569;
+}
+
+
+/* =========================
+   PRECIO Y STOCK
+========================= */
+
+.product-bottom {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: end;
+
+    margin-top: 20px;
+}
+
+
+.price-label {
+    display: block;
+
+    font-size: 12px;
+
+    color: #94a3b8;
+}
+
+
+.price {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    color: #0f766e;
+}
+
+
+.stock {
+    padding: 7px 11px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+
+.available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+
+.unavailable {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* =========================
+   SIN PRODUCTOS
+========================= */
+
+.empty {
+    text-align: center;
+
+    background: white;
+
+    padding: 80px 20px;
+
+    border-radius: 18px;
+}
+
+
+.empty-icon {
+    font-size: 60px;
+
+    margin-bottom: 20px;
+}
+
+
+.empty h2 {
+    margin-bottom: 10px;
+}
+
+
+.empty p {
+    color: #64748b;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    margin-top: 70px;
+
+    padding: 25px;
+
+    background: #0f172a;
+
+    color: #94a3b8;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    .header-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+
+    .nav {
+        gap: 15px;
+    }
+
+
+    .catalog-header {
+        flex-direction: column;
+
+        align-items: start;
+
+        gap: 20px;
+    }
+
+
+    .catalog-header h1 {
+        font-size: 30px;
+    }
+
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+    color: white;
+    text-decoration: none;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    width: 90%;
+    max-width: 1300px;
+
+    min-height: 520px;
+
+    margin: 40px auto;
+
+    padding: 70px;
+
+    border-radius: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 50px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #1e3a8a
+        );
+
+    color: white;
+
+    box-shadow:
+        0 15px 40px
+        rgba(15, 23, 42, 0.20);
+}
+
+
+.hero-content {
+    max-width: 700px;
+}
+
+
+.hero-tag {
+    display: inline-block;
+
+    color: #38bdf8;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 20px;
+}
+
+
+.hero h1 {
+    font-size: 55px;
+
+    line-height: 1.1;
+
+    margin-bottom: 25px;
+}
+
+
+.hero h1 span {
+    color: #38bdf8;
+}
+
+
+.hero p {
+    color: #cbd5e1;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+
+    max-width: 620px;
+
+    margin-bottom: 35px;
+}
+
+
+/* =========================
+   BOTONES
+========================= */
+
+.hero-buttons {
+    display: flex;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+}
+
+
+.btn-primary,
+.btn-secondary {
+    display: inline-block;
+
+    padding: 13px 24px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+
+.btn-primary {
+    background: #0ea5e9;
+
+    color: white;
+}
+
+
+.btn-primary:hover {
+    background: #0284c7;
+
+    transform: translateY(-2px);
+}
+
+
+.btn-secondary {
+    border: 1px solid #64748b;
+
+    color: white;
+}
+
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+/* =========================
+   HERO ICON
+========================= */
+
+.hero-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 300px;
+}
+
+
+.tech-circle {
+    width: 280px;
+
+    height: 280px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 120px;
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.15);
+
+    box-shadow:
+        0 0 80px
+        rgba(14, 165, 233, 0.25);
+}
+
+
+/* =========================
+   BENEFICIOS
+========================= */
+
+.benefits {
+    width: 90%;
+
+    max-width: 1300px;
+
+    margin: 80px auto;
+}
+
+
+.section-title {
+    text-align: center;
+
+    margin-bottom: 45px;
+}
+
+
+.section-title span {
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+.section-title h2 {
+    margin-top: 10px;
+
+    font-size: 35px;
+}
+
+
+/* =========================
+   BENEFIT GRID
+========================= */
+
+.benefit-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+}
+
+
+.benefit-card {
+    background: white;
+
+    padding: 35px;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 25px
+        rgba(15, 23, 42, 0.07);
+
+    transition: 0.3s;
+}
+
+
+.benefit-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 15px 30px
+        rgba(15, 23, 42, 0.12);
+}
+
+
+.benefit-icon {
+    font-size: 45px;
+
+    margin-bottom: 20px;
+}
+
+
+.benefit-card h3 {
+    font-size: 21px;
+
+    margin-bottom: 12px;
+}
+
+
+.benefit-card p {
+    color: #64748b;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   CTA
+========================= */
+
+.catalog-cta {
+    width: 90%;
+
+    max-width: 1300px;
+
+    margin: 80px auto;
+
+    padding: 45px;
+
+    border-radius: 20px;
+
+    background: #e0f2fe;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+
+.catalog-cta h2 {
+    font-size: 30px;
+
+    margin-bottom: 10px;
+}
+
+
+.catalog-cta p {
+    color: #475569;
+}
+
+
+/* =========================
+   RESPONSIVE HOME
+========================= */
+
+@media (max-width: 900px) {
+
+    .hero {
+        padding: 50px 35px;
+
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+
+    .hero-icon {
+        min-width: auto;
+    }
+
+
+    .tech-circle {
+        width: 200px;
+
+        height: 200px;
+
+        font-size: 80px;
+    }
+
+
+    .benefit-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .catalog-cta {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .hero {
+        width: 94%;
+
+        margin-top: 20px;
+
+        padding: 40px 20px;
+    }
+
+
+    .hero h1 {
+        font-size: 35px;
+    }
+
+
+    .hero p {
+        font-size: 15px;
+    }
+
+
+    .catalog-cta {
+        width: 94%;
+    }
+
+}
+
+/* =========================
+   CONTACTO
+========================= */
+
+.contact-page {
+    width: 90%;
+    max-width: 1300px;
+
+    margin: 55px auto;
+}
+
+
+/* ENCABEZADO */
+
+.contact-header {
+    text-align: center;
+
+    margin-bottom: 50px;
+}
+
+
+.contact-header span {
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+}
+
+
+.contact-header h1 {
+    font-size: 42px;
+
+    margin-top: 10px;
+
+    margin-bottom: 12px;
+
+    color: #0f172a;
+}
+
+
+.contact-header p {
+    color: #64748b;
+
+    font-size: 16px;
+}
+
+
+/* CONTENEDOR */
+
+.contact-container {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1.2fr;
+
+    gap: 35px;
+
+    align-items: start;
+}
+
+
+/* INFORMACIÓN */
+
+.company-info {
+    background: #0f172a;
+
+    color: white;
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 30px
+        rgba(15, 23, 42, 0.15);
+}
+
+
+.company-info h2 {
+    font-size: 27px;
+
+    margin-bottom: 18px;
+}
+
+
+.company-description {
+    color: #cbd5e1;
+
+    line-height: 1.7;
+
+    margin-bottom: 30px;
+}
+
+
+/* ITEMS INFORMACIÓN */
+
+.info-item {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+
+.info-icon {
+    width: 45px;
+
+    height: 45px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #1e3a8a;
+
+    font-size: 20px;
+}
+
+
+.info-item h3 {
+    font-size: 16px;
+
+    margin-bottom: 5px;
+}
+
+
+.info-item p {
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* FORMULARIO */
+
+.contact-form-container {
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(15, 23, 42, 0.08);
+}
+
+
+.contact-form-container h2 {
+    font-size: 27px;
+
+    margin-bottom: 8px;
+}
+
+
+.contact-form-container > p {
+    color: #64748b;
+
+    margin-bottom: 30px;
+}
+
+
+/* CAMPOS */
+
+.contact-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.form-group label {
+    color: #334155;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+
+    padding: 13px 15px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    transition: 0.3s;
+
+    background: #f8fafc;
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #2563eb;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.10);
+}
+
+
+.form-group textarea {
+    resize: vertical;
+
+    min-height: 130px;
+}
+
+
+/* BOTÓN */
+
+.contact-button {
+    border: none;
+
+    padding: 14px 25px;
+
+    border-radius: 10px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.contact-button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 15px
+        rgba(37, 99, 235, 0.25);
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+
+
+    .contact-header h1 {
+        font-size: 35px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .contact-page {
+        width: 94%;
+    }
+
+
+    .company-info,
+    .contact-form-container {
+        padding: 25px;
+    }
+
+
+    .contact-header h1 {
+        font-size: 30px;
+    }
+
+}

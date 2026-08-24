@@ -1,14 +1,26 @@
 import requests
 
-from django.conf import settings
 from django.shortcuts import render
+
+
+FASTAPI_URL = "http://127.0.0.1:8000/productos/"
+
+
+def home(request):
+
+    return render(
+        request,
+        "catalog/home.html"
+    )
 
 
 def product_list(request):
 
     try:
+
         response = requests.get(
-            f"{settings.FASTAPI_URL}/productos/"
+            FASTAPI_URL,
+            timeout=5
         )
 
         response.raise_for_status()
@@ -17,16 +29,22 @@ def product_list(request):
 
     except requests.exceptions.RequestException as error:
 
-        print(f"Error al consumir la API: {error}")
+        print(f"Error al consumir FastAPI: {error}")
 
         products = []
-
-    context = {
-        "products": products
-    }
 
     return render(
         request,
         "catalog/products.html",
-        context
+        {
+            "products": products
+        }
+    )
+
+
+def contact(request):
+
+    return render(
+        request,
+        "catalog/contact.html"
     )

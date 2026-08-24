@@ -1,0 +1,173 @@
+{% extends "catalog/base.html" %}
+
+
+{% block title %}
+    Inicio | TechGear
+{% endblock %}
+
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="hero-tag">
+            TECHGEAR STORE
+        </span>
+
+        <h1>
+            Tecnología que impulsa
+            <span>tu mundo.</span>
+        </h1>
+
+        <p>
+            Bienvenido a TechGear, tu tienda especializada
+            en hardware y accesorios tecnológicos.
+            Encuentra productos para gaming, trabajo,
+            estudio y entretenimiento.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+                href="{% url 'product_list' %}"
+                class="btn-primary"
+            >
+                Ver catálogo
+            </a>
+
+            <a
+                href="#beneficios"
+                class="btn-secondary"
+            >
+                Conoce más
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-icon">
+
+        <div class="tech-circle">
+
+            💻
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section
+    class="benefits"
+    id="beneficios"
+>
+
+    <div class="section-title">
+
+        <span>
+            ¿POR QUÉ TECHGEAR?
+        </span>
+
+        <h2>
+            Todo lo que necesitas
+            en un solo lugar
+        </h2>
+
+    </div>
+
+
+    <div class="benefit-grid">
+
+
+        <article class="benefit-card">
+
+            <div class="benefit-icon">
+                🖥️
+            </div>
+
+            <h3>
+                Hardware
+            </h3>
+
+            <p>
+                Componentes y equipos para mejorar
+                el rendimiento de tu computador.
+            </p>
+
+        </article>
+
+
+        <article class="benefit-card">
+
+            <div class="benefit-icon">
+                🎮
+            </div>
+
+            <h3>
+                Gaming
+            </h3>
+
+            <p>
+                Encuentra accesorios y periféricos
+                para llevar tu experiencia gaming
+                al siguiente nivel.
+            </p>
+
+        </article>
+
+
+        <article class="benefit-card">
+
+            <div class="benefit-icon">
+                ⚡
+            </div>
+
+            <h3>
+                Tecnología
+            </h3>
+
+            <p>
+                Productos tecnológicos pensados
+                para trabajo, estudio y entretenimiento.
+            </p>
+
+        </article>
+
+
+    </div>
+
+</section>
+
+
+<section class="catalog-cta">
+
+    <div>
+
+        <h2>
+            ¿Listo para encontrar
+            tu próximo producto?
+        </h2>
+
+        <p>
+            Explora nuestro catálogo de hardware
+            y accesorios tecnológicos.
+        </p>
+
+    </div>
+
+
+    <a
+        href="{% url 'product_list' %}"
+        class="btn-primary"
+    >
+        Explorar productos
+    </a>
+
+</section>
+
+{% endblock %}
