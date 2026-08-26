@@ -1,0 +1,246 @@
+{% extends "catalog/base.html" %}
+
+
+{% block title %}
+    Carrito | TechGear
+{% endblock %}
+
+
+{% block content %}
+
+<section class="catalog">
+
+    <!-- ==========================================
+         ENCABEZADO
+    =========================================== -->
+
+    <div class="catalog-header">
+
+        <div>
+
+            <p class="subtitle">
+                TECHGEAR STORE
+            </p>
+
+            <h1>
+                🛒 Mi carrito
+            </h1>
+
+            <p class="description">
+                Revisa los productos que deseas comprar
+                antes de confirmar tu pedido.
+            </p>
+
+        </div>
+
+
+        <div class="product-count">
+
+            <span>
+                {{ cart|length }}
+            </span>
+
+            productos
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         CARRITO CON PRODUCTOS
+    =========================================== -->
+
+    {% if cart %}
+
+        <div class="products-grid">
+
+            {% for product_id, item in cart.items %}
+
+                <article class="product-card">
+
+                    <!-- ICONO -->
+
+                    <div class="product-image">
+
+                        💻
+
+                    </div>
+
+
+                    <!-- INFORMACIÓN -->
+
+                    <div class="product-content">
+
+                        <span class="category">
+                            Producto
+                        </span>
+
+
+                        <h2>
+                            {{ item.nombre }}
+                        </h2>
+
+
+                        <div class="product-info">
+
+                            <p>
+                                <strong>
+                                    Precio:
+                                </strong>
+
+                                ${{ item.precio }}
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Stock disponible:
+                                </strong>
+
+                                {{ item.stock }}
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Cantidad:
+                                </strong>
+
+                                {{ item.cantidad }}
+                            </p>
+
+                        </div>
+
+
+                        <!-- SUBTOTAL -->
+
+                        <div class="product-bottom">
+
+                            <div>
+
+                                <span class="price-label">
+                                    Subtotal
+                                </span>
+
+                                <span class="price">
+                                    ${{ item.subtotal }}
+                                </span>
+
+                            </div>
+
+
+                            <a
+                                href="{% url 'remove_from_cart' product_id %}"
+                                class="remove-button"
+                            >
+                                🗑️ Eliminar
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ======================================
+             RESUMEN DEL PEDIDO
+        ======================================= -->
+
+        <div class="cart-summary">
+
+            <div>
+
+                <span>
+                    Total de productos
+                </span>
+
+                <strong>
+                    {{ cart|length }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Total a pagar
+                </span>
+
+                <strong>
+                    ${{ total }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ======================================
+             BOTONES
+        ======================================= -->
+
+        <div class="cart-actions">
+
+            <a
+                href="{% url 'product_list' %}"
+                class="secondary-button"
+            >
+                ← Seguir comprando
+            </a>
+
+
+            <a
+                href="{% url 'checkout' %}"
+                class="buy-button"
+            >
+                Continuar con el pedido →
+            </a>
+
+        </div>
+
+
+    {% else %}
+
+        <!-- ======================================
+             CARRITO VACÍO
+        ======================================= -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                🛒
+            </div>
+
+
+            <h2>
+                Tu carrito está vacío
+            </h2>
+
+
+            <p>
+                Todavía no has agregado productos
+                a tu carrito.
+            </p>
+
+
+            <a
+                href="{% url 'product_list' %}"
+                class="buy-button"
+            >
+                Ver catálogo
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

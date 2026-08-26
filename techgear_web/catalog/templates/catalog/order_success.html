@@ -1,0 +1,202 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}
+    Pedido realizado | TechGear
+{% endblock %}
+
+
+{% block content %}
+
+<section class="order-success">
+
+    <div class="success-header">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h1>
+            ¡Pedido realizado!
+        </h1>
+
+        <p>
+            Tu pedido fue registrado correctamente.
+        </p>
+
+    </div>
+
+
+    <!-- ==========================================
+         INFORMACIÓN DEL PEDIDO
+         ========================================== -->
+
+    <div class="order-container">
+
+
+        <!-- ==========================================
+             DATOS DEL CLIENTE
+             ========================================== -->
+
+        <div class="order-info">
+
+            <h2>
+                Información del pedido
+            </h2>
+
+            <div class="info-row">
+
+                <span>
+                    Cliente:
+                </span>
+
+                <strong>
+                    {{ order.usuario }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Estado:
+                </span>
+
+                <strong class="status">
+                    {{ order.estado|title }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    ID del pedido:
+                </span>
+
+                <strong>
+                    {{ order.id }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             PRODUCTOS COMPRADOS
+             ========================================== -->
+
+        <div class="order-products">
+
+            <h2>
+                Productos comprados
+            </h2>
+
+
+            {% for product in order.productos %}
+
+                <article class="order-product">
+
+                    <div class="product-icon">
+                        🛒
+                    </div>
+
+
+                    <div class="product-details">
+
+                        <h3>
+                            {{ product.nombre }}
+                        </h3>
+
+
+                        <div class="product-data">
+
+                            <span>
+                                <strong>
+                                    Precio:
+                                </strong>
+
+                                ${{ product.precio|floatformat:0 }}
+                            </span>
+
+
+                            <span>
+                                <strong>
+                                    Cantidad:
+                                </strong>
+
+                                {{ product.cantidad }}
+                            </span>
+
+
+                            <span>
+                                <strong>
+                                    Subtotal:
+                                </strong>
+
+                                ${{ product.subtotal|floatformat:0 }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <p>
+                    No hay productos asociados a este pedido.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ==========================================
+             TOTAL
+             ========================================== -->
+
+        <div class="order-total">
+
+            <span>
+                Total a pagar
+            </span>
+
+            <strong>
+                ${{ order.total|floatformat:0 }}
+            </strong>
+
+        </div>
+
+
+        <!-- ==========================================
+             BOTONES
+             ========================================== -->
+
+        <div class="order-actions">
+
+            <a
+                href="{% url 'product_list' %}"
+                class="button"
+            >
+                🛍️ Seguir comprando
+            </a>
+
+            <a
+                href="{% url 'home' %}"
+                class="button secondary"
+            >
+                🏠 Volver al inicio
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

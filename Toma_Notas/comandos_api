@@ -1,0 +1,13 @@
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& d:\Tercer_Trimestre\FastAPI_Python\Taller2\venv\Scripts\Activate.ps1)
+
+ python -m pip install -r requirements.txt
+
+ python.exe -m pip install --upgrade pip
+
+
+
+
+
+
+ djngo
+ python manage.py runserver 8001

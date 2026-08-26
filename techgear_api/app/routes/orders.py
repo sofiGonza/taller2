@@ -24,10 +24,13 @@ async def create(order: OrderCreate):
     result = await create_order(order)
 
     if not result:
+
         raise HTTPException(
             status_code=400,
-            detail="No se pudo crear el pedido. "
-                   "Verifique los productos y el stock."
+            detail=(
+                "No se pudo crear el pedido. "
+                "Verifique los productos y el stock."
+            )
         )
 
     return result

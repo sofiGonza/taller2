@@ -9,9 +9,14 @@
 
 <section class="catalog">
 
+    <!-- ==========================================
+         ENCABEZADO
+    =========================================== -->
+
     <div class="catalog-header">
 
         <div>
+
             <p class="subtitle">
                 TECHGEAR STORE
             </p>
@@ -24,7 +29,9 @@
                 Encuentra hardware y accesorios tecnológicos
                 para mejorar tu experiencia.
             </p>
+
         </div>
+
 
         <div class="product-count">
 
@@ -39,6 +46,10 @@
     </div>
 
 
+    <!-- ==========================================
+         PRODUCTOS
+    =========================================== -->
+
     {% if products %}
 
         <div class="products-grid">
@@ -46,6 +57,11 @@
             {% for product in products %}
 
                 <article class="product-card">
+
+
+                    <!-- ==================================
+                         ICONO
+                    =================================== -->
 
                     <div class="product-image">
 
@@ -86,7 +102,14 @@
                     </div>
 
 
+                    <!-- ==================================
+                         CONTENIDO
+                    =================================== -->
+
                     <div class="product-content">
+
+
+                        <!-- CATEGORÍA -->
 
                         <span class="category">
 
@@ -95,6 +118,8 @@
                         </span>
 
 
+                        <!-- NOMBRE -->
+
                         <h2>
 
                             {{ product.nombre }}
@@ -102,12 +127,16 @@
                         </h2>
 
 
+                        <!-- DESCRIPCIÓN -->
+
                         <p class="product-description">
 
                             {{ product.descripcion }}
 
                         </p>
 
+
+                        <!-- MARCA -->
 
                         <div class="product-info">
 
@@ -124,13 +153,20 @@
                         </div>
 
 
+                        <!-- ==================================
+                             PRECIO Y STOCK
+                        =================================== -->
+
                         <div class="product-bottom">
 
                             <div>
 
                                 <span class="price-label">
+
                                     Precio
+
                                 </span>
+
 
                                 <span class="price">
 
@@ -162,6 +198,36 @@
 
                         </div>
 
+
+                        <!-- ==================================
+                             AGREGAR AL CARRITO
+                        =================================== -->
+
+                        {% if product.stock > 0 %}
+
+                            <a
+                                href="{% url 'add_to_cart' product.id %}"
+                                class="buy-button"
+                            >
+
+                                🛒 Agregar al carrito
+
+                            </a>
+
+                        {% else %}
+
+                            <button
+                                class="buy-button disabled"
+                                disabled
+                            >
+
+                                Producto agotado
+
+                            </button>
+
+                        {% endif %}
+
+
                     </div>
 
                 </article>
@@ -173,20 +239,34 @@
 
     {% else %}
 
+
+        <!-- ==========================================
+             SIN PRODUCTOS
+        =========================================== -->
+
         <div class="empty">
 
             <div class="empty-icon">
+
                 📦
+
             </div>
 
+
             <h2>
+
                 No hay productos disponibles
+
             </h2>
 
+
             <p>
+
                 Actualmente no tenemos productos
                 registrados en nuestro catálogo.
+
             </p>
+
 
         </div>
 
