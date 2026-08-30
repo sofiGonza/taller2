@@ -1,88 +1,297 @@
-## cómo iniciar cada servidor.
-# link desplegado de FastAPI
+# ⚡ TechGear — Sistema Híbrido de Catálogo y Pedidos
+
+## 📌 Contexto
+
+**TechGear** es una tienda virtual especializada en hardware y accesorios tecnológicos.
+
+El proyecto utiliza una **arquitectura híbrida**:
+
+* **FastAPI:** API REST encargada de la lógica de negocio, productos y pedidos.
+* **Django:** aplicación web encargada de la interfaz y renderizado de las páginas.
+* **MongoDB Atlas:** base de datos utilizada por la API para almacenar la información.
+
+---
+# 🚀 Despliegue
+
+## FastAPI
+
+La API puede desplegarse en **Render**.
+
+ URL:
+
+```text
 https://taller2-7gm3.onrender.com
-
-
-# Documentacion en Swagger
+```
+URL swagger:
 https://taller2-7gm3.onrender.com/docs
 
+Configuración:
 
-# FastAPI
+```text
+Build Command:
+pip install -r requirements.txt
 
+Start Command:
+uvicorn main:app --host 0.0.0.0 --port $PORT
+```
+
+Las variables de entorno de MongoDB deben configurarse desde el panel de Render.
+
+## Django
+
+El proyecto web puede desplegarse en **Vercel**.
+URL:
+https://taller2-mu.vercel.app/
+
+URL para funcionalidades de administrador:
+https://taller2-mu.vercel.app/administrador/productos/
+
+
+
+
+## 🛠️ Tecnologías
+
+* Python
+* Django
+* FastAPI
+* Pydantic
+* MongoDB Atlas
+* HTML5
+* CSS3
+* Requests
+* Uvicorn
+* Git y GitHub
+
+---
+
+# 📥 Instalación
+
+## 1. Clonar el proyecto
+
+```bash
+git clone https://github.com/USUARIO/REPOSITORIO.git
+cd proyecto
+```
+
+## 2. Crear entorno virtual
+
+```bash
+python -m venv venv
+```
+
+### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+## 3. Instalar dependencias
+
+Para la API:
+
+```bash
 cd techgear_api
-
 pip install -r requirements.txt
+```
 
-uvicorn app.main:app --reload --port 8000
-Django
+Para Django:
 
-
-## otra terminal:
-
-cd techgear_web
-
+```bash
+cd ../techgear_web
 pip install -r requirements.txt
+```
 
-python manage.py migrate
+---
 
-python manage.py runserver 8001
+# ⚙️ Configuración
 
+Crear las variables de entorno necesarias.
 
+### FastAPI
 
-FastAPI:
+Configurar la conexión a MongoDB Atlas:
+
+```env
+MONGO_URI=tu_uri_de_mongodb
+DATABASE_NAME=techgear
+```
+
+### Django
+
+Configurar la URL de la API:
+
+```env
+FASTAPI_URL=http://127.0.0.1:8000
+```
+
+Para producción:
+
+```env
+FASTAPI_URL=https://taller2-7gm3.onrender.com
+```
+
+---
+
+# ▶️ Ejecución local
+
+## FastAPI
+
+Desde `techgear_api`:
+
+```bash
+uvicorn main:app --reload --port 8000
+```
+
+API disponible en:
+
+```text
 http://127.0.0.1:8000
+```
 
-Swagger:
+Documentación automática:
+
+```text
 http://127.0.0.1:8000/docs
+```
 
-Django:
+## Django
+
+Desde `techgear_web`:
+
+```bash
+python manage.py runserver 8001
+```
+
+Página web:
+
+```text
 http://127.0.0.1:8001
+```
 
-# Estructura del proyecto
-```taller2/
+### Puertos utilizados
+
+| Servicio      | Puerto |
+| ------------- | -----: |
+| FastAPI       | `8000` |
+| Django        | `8001` |
+| MongoDB Atlas | Remoto |
+
+---
+
+
+---
+
+# ✨ Funcionalidades
+
+### 👤 Cliente
+
+* Visualización del catálogo.
+* Consulta de productos.
+* Agregar productos al carrito.
+* Eliminación de productos del carrito.
+* Cálculo automático de subtotales y total.
+* Formulario de checkout.
+* Creación de pedidos.
+* Consulta de pedidos.
+* Visualización del detalle de pedidos.
+* Página de contacto.
+
+### 🔧 Administrador
+
+* Visualización de productos.
+* Registro de productos.
+* Edición de productos.
+* Eliminación de productos.
+* Gestión del inventario mediante la API.
+
+---
+
+# 📂 Estructura del proyecto
+
+```text
+TechGear/
 │
 ├── techgear_api/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── database/
-│   │   │   └── connection.py
-│   │   ├── schemas/
-│   │   │   ├── product.py
-│   │   │   └── order.py
-│   │   ├── routes/
-│   │   │   ├── products.py
-│   │   │   └── orders.py
-│   │   └── services/
-│   │       ├── product_service.py
-│   │       └── order_service.py
-│   │
-│   ├── .env
-│   ├── .gitignore
-│   └── requirements.txt
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── routers/
+│   │   ├── products.py
+│   │   └── orders.py
+│   ├── schemas/
+│   ├── services/
+│   └── database/
 │
 ├── techgear_web/
 │   ├── manage.py
 │   │
 │   ├── config/
-│   │   ├── __init__.py
 │   │   ├── settings.py
 │   │   ├── urls.py
-│   │   ├── asgi.py
 │   │   └── wsgi.py
 │   │
 │   └── catalog/
-│       ├── migrations/
+│       ├── views.py
+│       ├── urls.py
+│       │
 │       ├── templates/
 │       │   └── catalog/
 │       │       ├── base.html
-│       │       └── products.html
+│       │       ├── home.html
+│       │       ├── products.html
+│       │       ├── cart.html
+│       │       ├── checkout.html
+│       │       ├── orders.html
+│       │       ├── order.html
+│       │       ├── contact.html
+│       │       ├── admin_products.html
+│       │       └── admin_product_form.html
 │       │
-│       ├── __init__.py
-│       ├── admin.py
-│       ├── apps.py
-│       ├── models.py
-│       ├── urls.py
-│       └── views.py
+│       └── static/
+│           └── catalog/
+│               └── css/
+│                   ├── base.css
+│                   ├── home.css
+│                   ├── products.css
+│                   ├── cart.css
+│                   ├── checkout.css
+│                   ├── orders.css
+│                   └── contact.css
 │
-├── README.md
-└── .gitignore```
+└── README.md
+```
+
+---
+
+# 🔄 Funcionamiento
+
+```text
+Usuario
+   │
+   ▼
+Django ──────► FastAPI ──────► MongoDB Atlas
+   ▲               │
+   │               │
+   └───────────────┘
+```
+
+Django funciona como **cliente web**, mientras que FastAPI procesa las operaciones de productos y pedidos y se comunica con MongoDB Atlas.
+
+---
+
+## 👩‍💻 Ejecución rápida
+
+```bash
+# Terminal 1
+cd techgear_api
+venv\Scripts\activate
+uvicorn main:app --reload --port 8000
+
+# Terminal 2
+cd techgear_web
+venv\Scripts\activate
+python manage.py runserver 8001
+```
+
+Después ingresar a:
+
+**http://127.0.0.1:8001**
