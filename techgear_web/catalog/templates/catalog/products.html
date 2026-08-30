@@ -1,17 +1,23 @@
 {% extends "catalog/base.html" %}
+{% load static %}
 
 {% block title %}
     Catálogo | TechGear
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'catalog/css/products.css' %}"
+>
+
 {% endblock %}
 
 
 {% block content %}
 
 <section class="catalog">
-
-    <!-- ==========================================
-         ENCABEZADO
-    =========================================== -->
 
     <div class="catalog-header">
 
@@ -46,10 +52,6 @@
     </div>
 
 
-    <!-- ==========================================
-         PRODUCTOS
-    =========================================== -->
-
     {% if products %}
 
         <div class="products-grid">
@@ -58,120 +60,64 @@
 
                 <article class="product-card">
 
-
-                    <!-- ==================================
-                         ICONO
-                    =================================== -->
-
                     <div class="product-image">
 
                         {% if product.categoria == "Laptops" %}
-
                             💻
-
                         {% elif product.categoria == "Monitores" %}
-
                             🖥️
-
                         {% elif product.categoria == "Teclados" %}
-
                             ⌨️
-
                         {% elif product.categoria == "Mouse" %}
-
                             🖱️
-
                         {% elif product.categoria == "Audio" %}
-
                             🎧
-
                         {% elif product.categoria == "Almacenamiento" %}
-
                             💾
-
                         {% elif product.categoria == "Componentes" %}
-
                             ⚙️
-
                         {% else %}
-
                             🔌
-
                         {% endif %}
 
                     </div>
 
 
-                    <!-- ==================================
-                         CONTENIDO
-                    =================================== -->
-
                     <div class="product-content">
 
-
-                        <!-- CATEGORÍA -->
-
                         <span class="category">
-
                             {{ product.categoria }}
-
                         </span>
 
-
-                        <!-- NOMBRE -->
-
                         <h2>
-
                             {{ product.nombre }}
-
                         </h2>
 
-
-                        <!-- DESCRIPCIÓN -->
-
                         <p class="product-description">
-
                             {{ product.descripcion }}
-
                         </p>
 
-
-                        <!-- MARCA -->
 
                         <div class="product-info">
 
                             <span>
-
-                                <strong>
-                                    Marca:
-                                </strong>
-
+                                <strong>Marca:</strong>
                                 {{ product.marca }}
-
                             </span>
 
                         </div>
 
-
-                        <!-- ==================================
-                             PRECIO Y STOCK
-                        =================================== -->
 
                         <div class="product-bottom">
 
                             <div>
 
                                 <span class="price-label">
-
                                     Precio
-
                                 </span>
 
-
                                 <span class="price">
-
                                     ${{ product.precio }}
-
                                 </span>
 
                             </div>
@@ -180,18 +126,13 @@
                             {% if product.stock > 0 %}
 
                                 <span class="stock available">
-
-                                    {{ product.stock }}
-                                    disponibles
-
+                                    {{ product.stock }} disponibles
                                 </span>
 
                             {% else %}
 
                                 <span class="stock unavailable">
-
                                     Agotado
-
                                 </span>
 
                             {% endif %}
@@ -199,19 +140,13 @@
                         </div>
 
 
-                        <!-- ==================================
-                             AGREGAR AL CARRITO
-                        =================================== -->
-
                         {% if product.stock > 0 %}
 
                             <a
                                 href="{% url 'add_to_cart' product.id %}"
                                 class="buy-button"
                             >
-
                                 🛒 Agregar al carrito
-
                             </a>
 
                         {% else %}
@@ -220,13 +155,10 @@
                                 class="buy-button disabled"
                                 disabled
                             >
-
                                 Producto agotado
-
                             </button>
 
                         {% endif %}
-
 
                     </div>
 
@@ -236,37 +168,22 @@
 
         </div>
 
-
     {% else %}
-
-
-        <!-- ==========================================
-             SIN PRODUCTOS
-        =========================================== -->
 
         <div class="empty">
 
             <div class="empty-icon">
-
                 📦
-
             </div>
 
-
             <h2>
-
                 No hay productos disponibles
-
             </h2>
 
-
             <p>
-
                 Actualmente no tenemos productos
                 registrados en nuestro catálogo.
-
             </p>
-
 
         </div>
 

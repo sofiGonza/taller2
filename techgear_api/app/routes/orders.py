@@ -1,11 +1,15 @@
 from fastapi import APIRouter, HTTPException, status
+from typing import List
 
 from app.schemas.order import (
     OrderCreate,
     OrderResponse
 )
 
-from app.services.order_service import create_order
+from app.services.order_service import (
+    create_order,
+    get_orders
+)
 
 
 router = APIRouter(
@@ -13,6 +17,10 @@ router = APIRouter(
     tags=["Pedidos"]
 )
 
+
+# =====================================================
+# CREAR PEDIDO
+# =====================================================
 
 @router.post(
     "/",
@@ -34,3 +42,19 @@ async def create(order: OrderCreate):
         )
 
     return result
+
+
+# =====================================================
+# OBTENER PEDIDOS
+# =====================================================
+
+@router.get(
+    "/",
+    response_model=List[OrderResponse],
+    status_code=status.HTTP_200_OK
+)
+async def get_all_orders():
+
+    orders = await get_orders()
+
+    return orders

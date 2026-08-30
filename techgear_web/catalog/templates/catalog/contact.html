@@ -1,8 +1,17 @@
 {% extends "catalog/base.html" %}
-
+{% load static %}
 
 {% block title %}
     Contacto | TechGear
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'catalog/css/contact.css' %}"
+>
+
 {% endblock %}
 
 
@@ -11,11 +20,9 @@
 <section class="contact-page">
 
 
-    <!-- ENCABEZADO -->
-
     <div class="contact-header">
 
-        <span>
+        <span class="subtitle">
             TECHGEAR STORE
         </span>
 
@@ -24,8 +31,8 @@
         </h1>
 
         <p>
-            ¿Tienes alguna pregunta o necesitas asesoría?
-            Estamos aquí para ayudarte.
+            ¿Tienes alguna pregunta sobre nuestros productos
+            o servicios? Estamos aquí para ayudarte.
         </p>
 
     </div>
@@ -34,33 +41,25 @@
     <div class="contact-container">
 
 
-        <!-- INFORMACIÓN DE LA EMPRESA -->
+        <!-- INFORMACIÓN -->
 
-        <div class="company-info">
+        <div class="contact-info">
 
             <h2>
-                Información de TechGear
+                Información de la empresa
             </h2>
 
-            <p class="company-description">
-                TechGear es una empresa especializada en
-                hardware, computadores y accesorios
-                tecnológicos. Nuestro objetivo es ofrecer
-                productos de calidad y brindar soluciones
-                tecnológicas para nuestros clientes.
-            </p>
 
+            <div class="contact-item">
 
-            <div class="info-item">
-
-                <div class="info-icon">
+                <div class="contact-icon">
                     📍
                 </div>
 
                 <div>
 
                     <h3>
-                        Ubicación
+                        Dirección
                     </h3>
 
                     <p>
@@ -72,37 +71,16 @@
             </div>
 
 
-            <div class="info-item">
+            <div class="contact-item">
 
-                <div class="info-icon">
-                    📞
+                <div class="contact-icon">
+                    📧
                 </div>
 
                 <div>
 
                     <h3>
-                        Teléfono
-                    </h3>
-
-                    <p>
-                        +57 300 123 4567
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="info-item">
-
-                <div class="info-icon">
-                    ✉️
-                </div>
-
-                <div>
-
-                    <h3>
-                        Correo electrónico
+                        Correo
                     </h3>
 
                     <p>
@@ -114,9 +92,30 @@
             </div>
 
 
-            <div class="info-item">
+            <div class="contact-item">
 
-                <div class="info-icon">
+                <div class="contact-icon">
+                    📱
+                </div>
+
+                <div>
+
+                    <h3>
+                        Teléfono
+                    </h3>
+
+                    <p>
+                        +57 300 000 0000
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="contact-item">
+
+                <div class="contact-icon">
                     🕐
                 </div>
 
@@ -130,10 +129,6 @@
                         Lunes a viernes: 8:00 AM - 6:00 PM
                     </p>
 
-                    <p>
-                        Sábados: 9:00 AM - 2:00 PM
-                    </p>
-
                 </div>
 
             </div>
@@ -143,121 +138,76 @@
 
         <!-- FORMULARIO -->
 
-        <div class="contact-form-container">
+        <form
+            method="POST"
+            class="contact-form"
+        >
+
+            {% csrf_token %}
 
             <h2>
                 Envíanos un mensaje
             </h2>
 
-            <p>
-                Completa el formulario y nos pondremos
-                en contacto contigo.
-            </p>
 
+            <div class="contact-form-group">
 
-            <form
-                method="POST"
-                action=""
-                class="contact-form"
-            >
+                <label for="nombre">
+                    Nombre
+                </label>
 
-                {% csrf_token %}
-
-
-                <div class="form-group">
-
-                    <label for="nombre">
-                        Nombre completo
-                    </label>
-
-                    <input
-                        type="text"
-                        id="nombre"
-                        name="nombre"
-                        placeholder="Ingresa tu nombre"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="correo">
-                        Correo electrónico
-                    </label>
-
-                    <input
-                        type="email"
-                        id="correo"
-                        name="correo"
-                        placeholder="ejemplo@correo.com"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="telefono">
-                        Teléfono
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="telefono"
-                        name="telefono"
-                        placeholder="Ingresa tu teléfono"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="asunto">
-                        Asunto
-                    </label>
-
-                    <input
-                        type="text"
-                        id="asunto"
-                        name="asunto"
-                        placeholder="¿En qué podemos ayudarte?"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="mensaje">
-                        Mensaje
-                    </label>
-
-                    <textarea
-                        id="mensaje"
-                        name="mensaje"
-                        rows="6"
-                        placeholder="Escribe tu mensaje..."
-                        required
-                    ></textarea>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="contact-button"
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    required
+                    placeholder="Tu nombre"
                 >
-                    Enviar mensaje
-                </button>
 
-            </form>
+            </div>
 
-        </div>
+
+            <div class="contact-form-group">
+
+                <label for="correo">
+                    Correo electrónico
+                </label>
+
+                <input
+                    type="email"
+                    id="correo"
+                    name="correo"
+                    required
+                    placeholder="correo@ejemplo.com"
+                >
+
+            </div>
+
+
+            <div class="contact-form-group">
+
+                <label for="mensaje">
+                    Mensaje
+                </label>
+
+                <textarea
+                    id="mensaje"
+                    name="mensaje"
+                    required
+                    placeholder="Escribe tu mensaje..."
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="contact-button"
+            >
+                Enviar mensaje
+            </button>
+
+        </form>
 
     </div>
 

@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -18,82 +19,147 @@
         {% endblock %}
     </title>
 
+    <!-- CSS PRINCIPAL -->
     <link
         rel="stylesheet"
-        href="{% static 'catalog/css/products.css' %}"
+        href="{% static 'catalog/css/base.css' %}"
     >
+
+    <!-- CSS ESPECÍFICO DE CADA PÁGINA -->
+    {% block extra_css %}
+    {% endblock %}
 
 </head>
 
-
 <body>
 
+    <!-- =========================
+         NAVBAR
+    ========================== -->
 
-<header class="header">
+    <header class="navbar">
 
-    <div class="header-container">
+        <div class="navbar-container">
 
-
-        <a
-            href="{% url 'home' %}"
-            class="logo"
-        >
-            💻 TechGear
-        </a>
-
-
-        <nav class="nav">
-
-            <a href="{% url 'home' %}">
-                Inicio
+            <a
+                href="{% url 'home' %}"
+                class="logo"
+            >
+                ⚡ TechGear
             </a>
 
-            <a href="{% url 'product_list' %}">
-                Catálogo
-            </a>
-<a href="{% url 'contact' %}">
-    Contacto
-</a>
+            <nav class="nav-links">
 
-        </nav>
+                <a href="{% url 'home' %}">
+                    Inicio
+                </a>
+
+                <a href="{% url 'product_list' %}">
+                    Catálogo
+                </a>
+
+                <a href="{% url 'contact' %}">
+                    Contacto
+                </a>
+
+                <a href="{% url 'cart' %}">
+                    🛒 Carrito
+                </a>
+
+                <a href="{% url 'orders' %}">
+                    📦 Pedidos
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
 
 
-    </div>
+    <!-- =========================
+         CONTENIDO
+    ========================== -->
 
-</header>
+    <main>
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
 
 
-<main>
+    <!-- =========================
+         FOOTER
+    ========================== -->
 
-    {% block content %}
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div>
+
+                <h3>
+                    ⚡ TechGear
+                </h3>
+
+                <p>
+                    Hardware y accesorios tecnológicos
+                    para mejorar tu experiencia.
+                </p>
+
+            </div>
+
+            <div>
+
+                <h4>
+                    Enlaces
+                </h4>
+
+                <a href="{% url 'home' %}">
+                    Inicio
+                </a>
+
+                <a href="{% url 'product_list' %}">
+                    Catálogo
+                </a>
+
+                <a href="{% url 'contact' %}">
+                    Contacto
+                </a>
+
+            </div>
+
+            <div>
+
+                <h4>
+                    Contacto
+                </h4>
+
+                <p>
+                    📧 contacto@techgear.com
+                </p>
+
+                <p>
+                    📱 +57 300 000 0000
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 TechGear. Todos los derechos reservados.
+            </p>
+
+        </div>
+
+    </footer>
+
+    {% block extra_js %}
     {% endblock %}
-
-</main>
-
-
-<footer
-    class="footer"
-    id="contacto"
->
-
-    <div>
-
-        <strong>
-            💻 TechGear
-        </strong>
-
-        <p>
-            Hardware y accesorios tecnológicos.
-        </p>
-
-    </div>
-
-    <p>
-        © 2026 TechGear. Todos los derechos reservados.
-    </p>
-
-</footer>
-
 
 </body>
 

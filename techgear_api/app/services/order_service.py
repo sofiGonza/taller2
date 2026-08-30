@@ -17,6 +17,8 @@ def order_to_response(order):
 
         "usuario": order["usuario"],
 
+        "cliente": order["cliente"],
+
         "productos": order["productos"],
 
         "total": order["total"],
@@ -42,9 +44,8 @@ async def create_order(order_data):
 
     for item in order_data.productos:
 
-
         # =============================================
-        # VALIDAR OBJECT ID
+        # VALIDAR ID
         # =============================================
 
         if not ObjectId.is_valid(item.product_id):
@@ -82,16 +83,15 @@ async def create_order(order_data):
         # =============================================
 
         subtotal = (
-            product["precio"]
+            float(product["precio"])
             * item.cantidad
         )
-
 
         total += subtotal
 
 
         # =============================================
-        # INFORMACIÓN DEL PRODUCTO EN EL PEDIDO
+        # AGREGAR PRODUCTO
         # =============================================
 
         products.append({
@@ -100,26 +100,28 @@ async def create_order(order_data):
 
             "nombre": product["nombre"],
 
-            "precio": product["precio"],
+            "precio": float(product["precio"]),
 
             "cantidad": item.cantidad,
 
-            "subtotal": subtotal
+            "subtotal": float(subtotal)
 
         })
 
 
     # =================================================
-    # CREAR PEDIDO
+    # CREAR DOCUMENTO
     # =================================================
 
     order = {
 
         "usuario": order_data.usuario,
 
+        "cliente": order_data.cliente.model_dump(),
+
         "productos": products,
 
-        "total": total,
+        "total": float(total),
 
         "estado": "pendiente"
 
@@ -127,7 +129,7 @@ async def create_order(order_data):
 
 
     # =================================================
-    # GUARDAR PEDIDO
+    # GUARDAR EN MONGODB
     # =================================================
 
     result = await orders_collection.insert_one(
@@ -160,3 +162,49 @@ async def create_order(order_data):
 
 
     return order_to_response(order)
+
+
+# =====================================================
+# OBTENER TODOS LOS PEDIDOS
+# =====================================================
+
+async def get_orders():
+
+    orders = []
+
+    cursor = orders_collection.find().sort(
+        "_id",
+        -1
+    )
+
+
+    async for order in cursor:
+
+        orders.append(
+            order_to_response(order)
+        )
+
+
+    return orders
+
+
+# =====================================================
+# OBTENER TODOS LOS PEDIDOS
+# =====================================================
+
+async def get_orders():
+
+    cursor = orders_collection.find().sort(
+        "_id",
+        -1
+    )
+
+    orders = []
+
+    async for order in cursor:
+
+        orders.append(
+            order_to_response(order)
+        )
+
+    return orders

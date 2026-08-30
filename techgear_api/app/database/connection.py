@@ -1,23 +1,60 @@
+
 import os
 
-from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
+from dotenv import load_dotenv
+
+
+# =====================================================
+# VARIABLES DE ENTORNO
+# =====================================================
 
 load_dotenv()
 
-MONGODB_URL = os.getenv("MONGODB_URL")
 
-client = AsyncIOMotorClient(MONGODB_URL)
+MONGO_URI = os.getenv(
+    "MONGO_URI"
+)
 
-database = client.techgear
+MONGO_DB = os.getenv(
+    "MONGO_DB",
+    "techgear"
+)
 
-products_collection = database.products
-orders_collection = database.orders
+
+# =====================================================
+# CONEXIÓN A MONGODB
+# =====================================================
+
+client = AsyncIOMotorClient(
+    MONGO_URI
+)
+
+db = client[
+    MONGO_DB
+]
 
 
-async def test_connection():
-    try:
-        await client.admin.command("ping")
-        print("Conexión a MongoDB exitosa")
-    except Exception as e:
-        print(f"Error al conectar a MongoDB: {e}")
+# =====================================================
+# COLECCIONES
+# =====================================================
+
+products_collection = db[
+    "productos"
+]
+
+orders_collection = db[
+    "pedidos"
+]
+
+usuarios_collection = db[
+    "usuarios"
+]
+
+roles_collection = db[
+    "roles"
+]
+
+permisos_collection = db[
+    "permisos"
+]

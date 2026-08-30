@@ -1,13 +1,12 @@
-import requests
-
 from django.shortcuts import render, redirect
+import requests
+import os
 
 
-# =====================================================
-# CONFIGURACIÓN DE LA API
-# =====================================================
-
-API_URL = "http://127.0.0.1:8000"
+FASTAPI_URL = os.getenv(
+    "FASTAPI_URL",
+    "http://127.0.0.1:8000"
+)
 
 
 # =====================================================
@@ -23,25 +22,30 @@ def home(request):
 
 
 # =====================================================
-# CATÁLOGO DE PRODUCTOS
+# CATÁLOGO
 # =====================================================
 
-def products(request):
+def product_list(request):
 
     try:
 
         response = requests.get(
-            f"{API_URL}/productos/",
+            f"{FASTAPI_URL}/productos/",
             timeout=5
         )
 
-        response.raise_for_status()
+        if response.status_code == 200:
 
-        products = response.json()
+            products = response.json()
+
+        else:
+
+            products = []
 
     except requests.RequestException:
 
         products = []
+
 
     return render(
         request,
@@ -65,68 +69,92 @@ def contact(request):
 
 
 # =====================================================
+# CARRITO
+# =====================================================
+
+def cart(request):
+
+    carrito = request.session.get(
+        "carrito",
+        []
+    )
+
+    total = 0
+
+    for item in carrito:
+
+        subtotal = (
+            float(item["precio"])
+            * int(item["cantidad"])
+        )
+
+        item["subtotal"] = subtotal
+
+        total += subtotal
+
+    request.session["carrito"] = carrito
+
+    return render(
+        request,
+        "catalog/cart.html",
+        {
+            "carrito": carrito,
+            "total": total
+        }
+    )
+
+
+# =====================================================
 # AGREGAR PRODUCTO AL CARRITO
 # =====================================================
 
 def add_to_cart(request, product_id):
 
+    carrito = request.session.get(
+        "carrito",
+        []
+    )
+
     try:
 
         response = requests.get(
-            f"{API_URL}/productos/{product_id}",
+            f"{FASTAPI_URL}/productos/{product_id}",
             timeout=5
         )
 
-        response.raise_for_status()
+        if response.status_code != 200:
+
+            return redirect(
+                "product_list"
+            )
 
         product = response.json()
 
     except requests.RequestException:
 
-        return redirect("product_list")
+        return redirect(
+            "product_list"
+        )
 
+    encontrado = False
 
-    # Obtener carrito actual
-    cart = request.session.get(
-        "cart",
-        {}
-    )
+    for item in carrito:
 
+        if item["product_id"] == product_id:
 
-    product_id = str(product_id)
+            if item["cantidad"] < product["stock"]:
 
+                item["cantidad"] += 1
 
-    # =================================================
-    # VERIFICAR STOCK
-    # =================================================
+            encontrado = True
 
-    if product.get("stock", 0) <= 0:
+            break
 
-        return redirect("product_list")
+    if not encontrado:
 
+        carrito.append({
 
-    # =================================================
-    # SI YA EXISTE EN EL CARRITO
-    # =================================================
-
-    if product_id in cart:
-
-        cantidad_actual = cart[product_id]["cantidad"]
-
-
-        # No permitir superar el stock
-        if cantidad_actual < product["stock"]:
-
-            cart[product_id]["cantidad"] += 1
-
-
-    # =================================================
-    # SI ES UN PRODUCTO NUEVO
-    # =================================================
-
-    else:
-
-        cart[product_id] = {
+            "product_id": product_id,
 
             "nombre": product["nombre"],
 
@@ -134,57 +162,16 @@ def add_to_cart(request, product_id):
 
             "stock": product["stock"],
 
-            "cantidad": 1
+            "cantidad": 1,
 
-        }
+            "subtotal": product["precio"]
 
+        })
 
-    # Guardar carrito
-    request.session["cart"] = cart
-
+    request.session["carrito"] = carrito
     request.session.modified = True
 
-
     return redirect("cart")
-
-
-# =====================================================
-# VER CARRITO
-# =====================================================
-
-def cart(request):
-
-    cart = request.session.get(
-        "cart",
-        {}
-    )
-
-
-    total = 0
-
-
-    # =================================================
-    # CALCULAR SUBTOTALES
-    # =================================================
-
-    for item in cart.values():
-
-        item["subtotal"] = (
-            item["precio"]
-            * item["cantidad"]
-        )
-
-        total += item["subtotal"]
-
-
-    return render(
-        request,
-        "catalog/cart.html",
-        {
-            "cart": cart,
-            "total": total
-        }
-    )
 
 
 # =====================================================
@@ -193,24 +180,23 @@ def cart(request):
 
 def remove_from_cart(request, product_id):
 
-    cart = request.session.get(
-        "cart",
-        {}
+    carrito = request.session.get(
+        "carrito",
+        []
     )
 
+    carrito = [
 
-    product_id = str(product_id)
+        item
 
+        for item in carrito
 
-    if product_id in cart:
+        if item["product_id"] != product_id
 
-        del cart[product_id]
+    ]
 
-
-    request.session["cart"] = cart
-
+    request.session["carrito"] = carrito
     request.session.modified = True
-
 
     return redirect("cart")
 
@@ -221,22 +207,18 @@ def remove_from_cart(request, product_id):
 
 def checkout(request):
 
-    cart = request.session.get("cart", {})
+    carrito = request.session.get(
+        "carrito",
+        []
+    )
 
-    # ==========================================
-    # SI EL CARRITO ESTÁ VACÍO
-    # ==========================================
+    if not carrito:
 
-    if not cart:
         return redirect("cart")
-
-    # ==========================================
-    # CALCULAR SUBTOTALES Y TOTAL
-    # ==========================================
 
     total = 0
 
-    for item in cart.values():
+    for item in carrito:
 
         item["subtotal"] = (
             float(item["precio"])
@@ -245,412 +227,666 @@ def checkout(request):
 
         total += item["subtotal"]
 
-    # ==========================================
-    # GET
-    # ==========================================
-
-    if request.method == "GET":
-
-        return render(
-            request,
-            "catalog/checkout.html",
-            {
-                "cart": cart,
-                "total": total
-            }
-        )
-
-    # ==========================================
-    # POST
-    # ==========================================
-
     if request.method == "POST":
 
-        usuario = request.POST.get("usuario", "").strip()
+        nombre = request.POST.get(
+            "nombre",
+            ""
+        ).strip()
 
-        # ======================================
-        # VALIDAR USUARIO
-        # ======================================
+        apellido = request.POST.get(
+            "apellido",
+            ""
+        ).strip()
 
-        if not usuario:
+        tipo_documento = request.POST.get(
+            "tipo_documento",
+            ""
+        ).strip()
 
-            return render(
-                request,
-                "catalog/checkout.html",
-                {
-                    "cart": cart,
-                    "total": total,
-                    "error": "Debes ingresar tu nombre."
-                }
-            )
+        numero_documento = request.POST.get(
+            "numero_documento",
+            ""
+        ).strip()
 
-        # ======================================
-        # CONSTRUIR LISTA DE PRODUCTOS
-        # ======================================
+        direccion = request.POST.get(
+            "direccion",
+            ""
+        ).strip()
+
+        correo = request.POST.get(
+            "correo",
+            ""
+        ).strip()
+
+        celular = request.POST.get(
+            "celular",
+            ""
+        ).strip()
+
+        usuario = (
+            f"{nombre} {apellido}"
+        ).strip()
 
         productos = []
 
-        for product_id, item in cart.items():
-
-            productos.append(
-                {
-                    "product_id": str(product_id),
-                    "cantidad": int(item["cantidad"])
-                }
-            )
-
-        # ======================================
-        # DATOS QUE RECIBIRÁ FASTAPI
-        # ======================================
-
-        order_data = {
-            "usuario": usuario,
-            "productos": productos
-        }
-
-        # ======================================
-        # MOSTRAR DATOS EN TERMINAL
-        # ======================================
-
-        print("\n========================================")
-        print("ENVIANDO PEDIDO A FASTAPI")
-        print("========================================")
-        print(order_data)
-        print("========================================\n")
-
-        try:
-
-            response = requests.post(
-                f"{API_URL}/pedidos/",
-                json=order_data,
-                timeout=10
-            )
-
-            # ==================================
-            # RESPUESTA FASTAPI
-            # ==================================
-
-            print("\n========================================")
-            print("RESPUESTA DE FASTAPI")
-            print("STATUS:", response.status_code)
-            print("BODY:", response.text)
-            print("========================================\n")
-
-            # ==================================
-            # PEDIDO CREADO
-            # ==================================
-
-            if response.status_code == 201:
-
-                order = response.json()
-
-                # Vaciar carrito
-                request.session["cart"] = {}
-
-                request.session.modified = True
-
-                return render(
-                    request,
-                    "catalog/order_success.html",
-                    {
-                        "order": order
-                    }
-                )
-
-            # ==================================
-            # ERROR DE FASTAPI
-            # ==================================
-
-            try:
-
-                error_data = response.json()
-
-                error_message = error_data.get(
-                    "detail",
-                    "No se pudo crear el pedido."
-                )
-
-            except ValueError:
-
-                error_message = (
-                    "FastAPI devolvió una respuesta "
-                    "que no pudo ser interpretada."
-                )
-
-            return render(
-                request,
-                "catalog/checkout.html",
-                {
-                    "cart": cart,
-                    "total": total,
-                    "error": error_message
-                }
-            )
-
-        except requests.RequestException as e:
-
-            print("\n========================================")
-            print("ERROR DE CONEXIÓN")
-            print(e)
-            print("========================================\n")
-
-            return render(
-                request,
-                "catalog/checkout.html",
-                {
-                    "cart": cart,
-                    "total": total,
-                    "error": (
-                        "No fue posible conectarse "
-                        "con FastAPI."
-                    )
-                }
-            )
-
-    return redirect("checkout")
-
-    cart = request.session.get(
-        "cart",
-        {}
-    )
-
-
-    # Si no hay productos
-    if not cart:
-
-        return redirect("cart")
-
-
-    total = 0
-
-
-    # =================================================
-    # CALCULAR SUBTOTALES
-    # =================================================
-
-    for item in cart.values():
-
-        item["subtotal"] = (
-            item["precio"]
-            * item["cantidad"]
-        )
-
-        total += item["subtotal"]
-
-
-    # =================================================
-    # MÉTODO GET
-    # =================================================
-
-    if request.method == "GET":
-
-        return render(
-            request,
-            "catalog/checkout.html",
-            {
-                "cart": cart,
-                "total": total
-            }
-        )
-
-
-    # =================================================
-    # MÉTODO POST
-    # =================================================
-
-    if request.method == "POST":
-
-        usuario = request.POST.get(
-            "usuario"
-        )
-
-
-        # Validar usuario
-        if not usuario:
-
-            return render(
-                request,
-                "catalog/checkout.html",
-                {
-                    "cart": cart,
-                    "total": total,
-                    "error": "Debes ingresar tu nombre."
-                }
-            )
-
-
-        # =============================================
-        # CONSTRUIR PRODUCTOS PARA FASTAPI
-        # =============================================
-
-        productos = []
-
-
-        for product_id, item in cart.items():
+        for item in carrito:
 
             productos.append({
 
-                "product_id": product_id,
+                "product_id": item["product_id"],
 
-                "cantidad": item["cantidad"]
+                "cantidad": int(
+                    item["cantidad"]
+                )
 
             })
 
+        cliente = {
 
-        # =============================================
-        # DATOS DEL PEDIDO
-        # =============================================
+            "nombre": nombre,
 
-        order_data = {
+            "apellido": apellido,
+
+            "tipo_documento": tipo_documento,
+
+            "numero_documento": numero_documento,
+
+            "direccion": direccion,
+
+            "correo": correo,
+
+            "celular": celular
+
+        }
+
+        pedido = {
 
             "usuario": usuario,
+
+            "cliente": cliente,
 
             "productos": productos
 
         }
 
-
         try:
 
             response = requests.post(
-                f"{API_URL}/pedidos/",
-                json=order_data,
+
+                f"{FASTAPI_URL}/pedidos/",
+
+                json=pedido,
+
                 timeout=10
+
             )
 
+            if response.status_code in [
+                200,
+                201
+            ]:
 
-            # =========================================
-            # PEDIDO CREADO
-            # =========================================
+                pedido_creado = response.json()
 
-            if response.status_code == 201:
+                pedido_creado["cliente"] = cliente
 
-                # Vaciar carrito
-                request.session["cart"] = {}
+                pedido_creado[
+                    "productos_detalle"
+                ] = carrito
+
+                request.session[
+                    "ultimo_pedido"
+                ] = pedido_creado
+
+                request.session[
+                    "carrito"
+                ] = []
 
                 request.session.modified = True
 
+                return render(
 
-                # Guardar temporalmente el pedido
-                order = response.json()
+                    request,
 
+                    "catalog/order.html",
+
+                    {
+                        "pedido": pedido_creado
+                    }
+
+                )
+
+            else:
 
                 return render(
+
                     request,
-                    "catalog/order_success.html",
+
+                    "catalog/checkout.html",
+
                     {
-                        "order": order
+                        "carrito": carrito,
+
+                        "total": total,
+
+                        "error": response.text
+
                     }
+
                 )
 
+        except requests.RequestException as e:
 
-            # =========================================
-            # ERROR DE FASTAPI
-            # =========================================
+            return render(
 
-            try:
+                request,
 
-                error_data = response.json()
+                "catalog/checkout.html",
 
-                error_message = error_data.get(
-                    "detail",
-                    "No se pudo crear el pedido."
-                )
+                {
+                    "carrito": carrito,
 
-            except ValueError:
+                    "total": total,
 
-                error_message = (
-                    "No se pudo crear el pedido."
-                )
+                    "error": str(e)
 
+                }
 
-        except requests.RequestException:
-
-            error_message = (
-                "No fue posible conectarse "
-                "con el servidor de pedidos."
             )
 
+    return render(
 
-        # =============================================
-        # MOSTRAR ERROR
-        # =============================================
+        request,
 
-        return render(
-            request,
-            "catalog/checkout.html",
-            {
-                "cart": cart,
-                "total": total,
-                "error": error_message
-            }
-        )
+        "catalog/checkout.html",
+
+        {
+            "carrito": carrito,
+
+            "total": total
+
+        }
+
+    )
 
 
 # =====================================================
-# PEDIDOS DEL USUARIO
+# PEDIDOS
 # =====================================================
 
 def orders(request):
 
-    # Obtener el nombre del usuario
-    usuario = request.GET.get(
-        "usuario"
-    )
-
-
-    if not usuario:
-
-        return render(
-            request,
-            "catalog/orders.html",
-            {
-                "orders": [],
-                "error": (
-                    "No se ha especificado "
-                    "el usuario."
-                )
-            }
-        )
-
+    pedidos = []
 
     try:
 
         response = requests.get(
-            f"{API_URL}/pedidos/",
-            params={
-                "usuario": usuario
-            },
-            timeout=5
+            f"{FASTAPI_URL}/pedidos/",
+            timeout=10
         )
 
-        response.raise_for_status()
+        if response.status_code == 200:
 
-        orders_data = response.json()
+            pedidos = response.json()
 
+        else:
+
+            print(
+                "Error obteniendo pedidos:",
+                response.status_code
+            )
+
+            print(response.text)
+
+    except requests.RequestException as e:
+
+        print(
+            "Error conectando con FastAPI:",
+            e
+        )
+
+    return render(
+
+        request,
+
+        "catalog/orders.html",
+
+        {
+            "pedidos": pedidos
+        }
+
+    )
+
+
+# =====================================================
+# DETALLE DEL PEDIDO
+# =====================================================
+
+def order_detail(request, pedido_id):
+
+    try:
+
+        response = requests.get(
+            f"{FASTAPI_URL}/pedidos/",
+            timeout=10
+        )
+
+        if response.status_code != 200:
+
+            return render(
+
+                request,
+
+                "catalog/orders.html",
+
+                {
+                    "pedidos": []
+                }
+
+            )
+
+        pedidos = response.json()
+
+        pedido = next(
+
+            (
+                p
+
+                for p in pedidos
+
+                if p["id"] == pedido_id
+
+            ),
+
+            None
+
+        )
+
+        if not pedido:
+
+            return render(
+
+                request,
+
+                "catalog/orders.html",
+
+                {
+                    "pedidos": pedidos
+                }
+
+            )
+
+        return render(
+
+            request,
+
+            "catalog/order.html",
+
+            {
+                "pedido": pedido
+            }
+
+        )
 
     except requests.RequestException:
 
-        orders_data = []
-
         return render(
+
             request,
+
             "catalog/orders.html",
+
             {
-                "orders": orders_data,
-                "error": (
-                    "No fue posible obtener "
-                    "los pedidos."
-                )
+                "pedidos": []
             }
+
         )
 
 
+# =====================================================
+# PANEL ADMINISTRADOR - PRODUCTOS
+# =====================================================
+
+def admin_products(request):
+
+    products = []
+    error = None
+
+    try:
+
+        response = requests.get(
+            f"{FASTAPI_URL}/productos/",
+            timeout=5
+        )
+
+        if response.status_code == 200:
+
+            products = response.json()
+
+        else:
+
+            error = (
+                f"FastAPI respondió con "
+                f"estado {response.status_code}"
+            )
+
+    except requests.RequestException as e:
+
+        error = (
+            "No se pudo conectar con FastAPI: "
+            f"{e}"
+        )
+
     return render(
+
         request,
-        "catalog/orders.html",
+
+        "catalog/admin_products.html",
+
         {
-            "orders": orders_data,
-            "usuario": usuario
+            "products": products,
+            "error": error
         }
+
+    )
+
+
+# =====================================================
+# ADMIN - AGREGAR PRODUCTO
+# =====================================================
+
+def admin_product_create(request):
+
+    error = None
+
+    if request.method == "POST":
+
+        product = {
+
+            "nombre": request.POST.get(
+                "nombre",
+                ""
+            ).strip(),
+
+            "descripcion": request.POST.get(
+                "descripcion",
+                ""
+            ).strip(),
+
+            "precio": request.POST.get(
+                "precio",
+                "0"
+            ),
+
+            "stock": request.POST.get(
+                "stock",
+                "0"
+            ),
+
+            "categoria": request.POST.get(
+                "categoria",
+                ""
+            ).strip(),
+
+            "marca": request.POST.get(
+                "marca",
+                ""
+            ).strip()
+
+        }
+
+        try:
+
+            product["precio"] = float(
+                product["precio"]
+            )
+
+            product["stock"] = int(
+                product["stock"]
+            )
+
+            response = requests.post(
+
+                f"{FASTAPI_URL}/productos/",
+
+                json=product,
+
+                timeout=10
+
+            )
+
+            if response.status_code == 201:
+
+                return redirect(
+                    "admin_products"
+                )
+
+            else:
+
+                try:
+
+                    api_error = response.json()
+
+                except ValueError:
+
+                    api_error = response.text
+
+                error = (
+                    f"No se pudo crear el producto: "
+                    f"{api_error}"
+                )
+
+        except ValueError:
+
+            error = (
+                "El precio debe ser un número "
+                "y el stock debe ser un número entero."
+            )
+
+        except requests.RequestException as e:
+
+            error = (
+                "No se pudo conectar con FastAPI: "
+                f"{e}"
+            )
+
+    return render(
+
+        request,
+
+        "catalog/admin_product_form.html",
+
+        {
+            "error": error,
+            "action": "create",
+            "product": None
+        }
+
+    )
+
+
+# =====================================================
+# ADMIN - EDITAR PRODUCTO
+# =====================================================
+
+def admin_product_edit(request, product_id):
+
+    error = None
+
+    # -------------------------------------------------
+    # OBTENER PRODUCTO
+    # -------------------------------------------------
+
+    try:
+
+        response = requests.get(
+
+            f"{FASTAPI_URL}/productos/{product_id}",
+
+            timeout=5
+
+        )
+
+        if response.status_code != 200:
+
+            return redirect(
+                "admin_products"
+            )
+
+        product = response.json()
+
+    except requests.RequestException:
+
+        return redirect(
+            "admin_products"
+        )
+
+    # -------------------------------------------------
+    # ACTUALIZAR
+    # -------------------------------------------------
+
+    if request.method == "POST":
+
+        product_data = {
+
+            "nombre": request.POST.get(
+                "nombre",
+                ""
+            ).strip(),
+
+            "descripcion": request.POST.get(
+                "descripcion",
+                ""
+            ).strip(),
+
+            "precio": request.POST.get(
+                "precio",
+                "0"
+            ),
+
+            "stock": request.POST.get(
+                "stock",
+                "0"
+            ),
+
+            "categoria": request.POST.get(
+                "categoria",
+                ""
+            ).strip(),
+
+            "marca": request.POST.get(
+                "marca",
+                ""
+            ).strip()
+
+        }
+
+        try:
+
+            product_data["precio"] = float(
+                product_data["precio"]
+            )
+
+            product_data["stock"] = int(
+                product_data["stock"]
+            )
+
+            response = requests.put(
+
+                f"{FASTAPI_URL}/productos/{product_id}",
+
+                json=product_data,
+
+                timeout=10
+
+            )
+
+            if response.status_code == 200:
+
+                return redirect(
+                    "admin_products"
+                )
+
+            else:
+
+                try:
+
+                    api_error = response.json()
+
+                except ValueError:
+
+                    api_error = response.text
+
+                error = (
+                    f"No se pudo actualizar: "
+                    f"{api_error}"
+                )
+
+        except ValueError:
+
+            error = (
+                "El precio debe ser un número "
+                "y el stock debe ser un número entero."
+            )
+
+        except requests.RequestException as e:
+
+            error = (
+                "No se pudo conectar con FastAPI: "
+                f"{e}"
+            )
+
+    return render(
+
+        request,
+
+        "catalog/admin_product_form.html",
+
+        {
+            "error": error,
+            "action": "edit",
+            "product": product
+        }
+
+    )
+
+
+# =====================================================
+# ADMIN - ELIMINAR PRODUCTO
+# =====================================================
+
+def admin_product_delete(request, product_id):
+
+    if request.method != "POST":
+
+        return redirect(
+            "admin_products"
+        )
+
+    try:
+
+        response = requests.delete(
+
+            f"{FASTAPI_URL}/productos/{product_id}",
+
+            timeout=10
+
+        )
+
+        if response.status_code == 204:
+
+            return redirect(
+                "admin_products"
+            )
+
+    except requests.RequestException as e:
+
+        print(
+            "Error eliminando producto:",
+            e
+        )
+
+    return redirect(
+        "admin_products"
     )

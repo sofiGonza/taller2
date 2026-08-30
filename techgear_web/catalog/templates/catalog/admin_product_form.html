@@ -1,0 +1,342 @@
+{% extends "catalog/base.html" %}
+{% load static %}
+
+{% block title %}
+
+    {% if action == "create" %}
+        Agregar producto | TechGear
+    {% else %}
+        Editar producto | TechGear
+    {% endif %}
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'catalog/css/admin_products.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="admin-form-section">
+
+    <div class="form-container">
+
+        <!-- ===================================== -->
+        <!-- ENCABEZADO -->
+        <!-- ===================================== -->
+
+        <div class="form-header">
+
+            <span class="admin-label">
+                TECHGEAR ADMIN
+            </span>
+
+
+            {% if action == "create" %}
+
+                <h1>
+                    Agregar producto
+                </h1>
+
+                <p>
+                    Registra un nuevo producto en el catálogo.
+                </p>
+
+            {% else %}
+
+                <h1>
+                    Editar producto
+                </h1>
+
+                <p>
+                    Modifica la información del producto.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ===================================== -->
+        <!-- ERROR -->
+        <!-- ===================================== -->
+
+        {% if error %}
+
+            <div class="error-message">
+
+                <strong>Error:</strong>
+
+                {{ error }}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ===================================== -->
+        <!-- FORMULARIO -->
+        <!-- ===================================== -->
+
+        <form
+            method="POST"
+            class="product-form"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- NOMBRE -->
+
+            <div class="form-group">
+
+                <label for="nombre">
+                    Nombre del producto
+                </label>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    maxlength="100"
+                    minlength="2"
+                    required
+                    value="{% if product %}{{ product.nombre }}{% endif %}"
+                    placeholder="Ej: Laptop Gamer"
+                >
+
+            </div>
+
+
+            <!-- DESCRIPCIÓN -->
+
+            <div class="form-group">
+
+                <label for="descripcion">
+                    Descripción
+                </label>
+
+                <textarea
+                    id="descripcion"
+                    name="descripcion"
+                    maxlength="300"
+                    minlength="5"
+                    required
+                    placeholder="Describe las características del producto..."
+                >{% if product %}{{ product.descripcion }}{% endif %}</textarea>
+
+            </div>
+
+
+            <!-- PRECIO Y STOCK -->
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="precio">
+                        Precio
+                    </label>
+
+                    <div class="input-prefix">
+
+                        <span>
+                            $
+                        </span>
+
+                        <input
+                            type="number"
+                            id="precio"
+                            name="precio"
+                            min="0.01"
+                            step="0.01"
+                            required
+                            value="{% if product %}{{ product.precio }}{% endif %}"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="stock">
+                        Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        id="stock"
+                        name="stock"
+                        min="0"
+                        step="1"
+                        required
+                        value="{% if product %}{{ product.stock }}{% endif %}"
+                        placeholder="0"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- CATEGORÍA -->
+
+            <div class="form-group">
+
+                <label for="categoria">
+                    Categoría
+                </label>
+
+                <select
+                    id="categoria"
+                    name="categoria"
+                    required
+                >
+
+                    <option
+                        value=""
+                        disabled
+                        {% if not product %}selected{% endif %}
+                    >
+                        Selecciona una categoría
+                    </option>
+
+
+                    <option
+                        value="Laptops"
+                        {% if product and product.categoria == "Laptops" %}selected{% endif %}
+                    >
+                        Laptops
+                    </option>
+
+
+                    <option
+                        value="Monitores"
+                        {% if product and product.categoria == "Monitores" %}selected{% endif %}
+                    >
+                        Monitores
+                    </option>
+
+
+                    <option
+                        value="Teclados"
+                        {% if product and product.categoria == "Teclados" %}selected{% endif %}
+                    >
+                        Teclados
+                    </option>
+
+
+                    <option
+                        value="Mouse"
+                        {% if product and product.categoria == "Mouse" %}selected{% endif %}
+                    >
+                        Mouse
+                    </option>
+
+
+                    <option
+                        value="Audio"
+                        {% if product and product.categoria == "Audio" %}selected{% endif %}
+                    >
+                        Audio
+                    </option>
+
+
+                    <option
+                        value="Almacenamiento"
+                        {% if product and product.categoria == "Almacenamiento" %}selected{% endif %}
+                    >
+                        Almacenamiento
+                    </option>
+
+
+                    <option
+                        value="Componentes"
+                        {% if product and product.categoria == "Componentes" %}selected{% endif %}
+                    >
+                        Componentes
+                    </option>
+
+
+                    <option
+                        value="Accesorios"
+                        {% if product and product.categoria == "Accesorios" %}selected{% endif %}
+                    >
+                        Accesorios
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- MARCA -->
+
+            <div class="form-group">
+
+                <label for="marca">
+                    Marca
+                </label>
+
+                <input
+                    type="text"
+                    id="marca"
+                    name="marca"
+                    maxlength="50"
+                    minlength="2"
+                    required
+                    value="{% if product %}{{ product.marca }}{% endif %}"
+                    placeholder="Ej: ASUS"
+                >
+
+            </div>
+
+
+            <!-- BOTONES -->
+
+            <div class="form-actions">
+
+                <a
+                    href="{% url 'admin_products' %}"
+                    class="cancel-button"
+                >
+                    Cancelar
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="save-button"
+                >
+
+                    {% if action == "create" %}
+
+                        ✓ Crear producto
+
+                    {% else %}
+
+                        ✓ Guardar cambios
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

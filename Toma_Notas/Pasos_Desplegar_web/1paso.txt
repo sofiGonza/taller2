@@ -1,0 +1,20 @@
+en vercel iniciar con la cuenta de git
+aderir un nuevo proyecto (new project)
+importo el repo
+en root directory -> edit
+selecciono el web -> continue
+
+en Enviroment Variables
+en views.py fastapi_url = os.getenv("fastapi_url", "https://taller2-7gm3.onrender.com")
+
+key
+fastapi_url
+value 
+ruta donde desplegamos el backend: https://taller2-7gm3.onrender.com
+
+diploy
+
+
+falta crearle panel d administrador, para agregar los productos, hacer un crud para el panel del admiistrador, la opcion de ver los pedidos una vez el usuario lo haga, y ver los detalles
+
+

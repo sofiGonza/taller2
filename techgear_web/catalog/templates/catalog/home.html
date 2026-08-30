@@ -1,8 +1,17 @@
 {% extends "catalog/base.html" %}
-
+{% load static %}
 
 {% block title %}
     Inicio | TechGear
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'catalog/css/home.css' %}"
+>
+
 {% endblock %}
 
 
@@ -12,161 +21,59 @@
 
     <div class="hero-content">
 
-        <span class="hero-tag">
-            TECHGEAR STORE
-        </span>
+        <p class="hero-subtitle">
+            BIENVENIDO A TECHGEAR
+        </p>
 
         <h1>
-            Tecnología que impulsa
-            <span>tu mundo.</span>
+            Tecnología para llevar
+            tu experiencia al siguiente nivel.
         </h1>
 
         <p>
-            Bienvenido a TechGear, tu tienda especializada
-            en hardware y accesorios tecnológicos.
-            Encuentra productos para gaming, trabajo,
-            estudio y entretenimiento.
+            Descubre hardware y accesorios tecnológicos
+            seleccionados para ofrecer rendimiento,
+            calidad y confiabilidad.
         </p>
 
         <div class="hero-buttons">
 
             <a
                 href="{% url 'product_list' %}"
-                class="btn-primary"
+                class="hero-button primary"
             >
-                Ver catálogo
+                🛒 Ver catálogo
             </a>
 
             <a
-                href="#beneficios"
-                class="btn-secondary"
+                href="{% url 'contact' %}"
+                class="hero-button secondary"
             >
-                Conoce más
+                📩 Contáctanos
             </a>
 
         </div>
 
     </div>
 
-
-    <div class="hero-icon">
-
-        <div class="tech-circle">
-
-            💻
-
-        </div>
-
-    </div>
-
 </section>
 
 
-<section
-    class="benefits"
-    id="beneficios"
->
+<section class="welcome-section">
 
-    <div class="section-title">
+    <p class="subtitle">
+        TECHGEAR STORE
+    </p>
 
-        <span>
-            ¿POR QUÉ TECHGEAR?
-        </span>
+    <h2>
+        Todo lo que necesitas en tecnología
+    </h2>
 
-        <h2>
-            Todo lo que necesitas
-            en un solo lugar
-        </h2>
-
-    </div>
-
-
-    <div class="benefit-grid">
-
-
-        <article class="benefit-card">
-
-            <div class="benefit-icon">
-                🖥️
-            </div>
-
-            <h3>
-                Hardware
-            </h3>
-
-            <p>
-                Componentes y equipos para mejorar
-                el rendimiento de tu computador.
-            </p>
-
-        </article>
-
-
-        <article class="benefit-card">
-
-            <div class="benefit-icon">
-                🎮
-            </div>
-
-            <h3>
-                Gaming
-            </h3>
-
-            <p>
-                Encuentra accesorios y periféricos
-                para llevar tu experiencia gaming
-                al siguiente nivel.
-            </p>
-
-        </article>
-
-
-        <article class="benefit-card">
-
-            <div class="benefit-icon">
-                ⚡
-            </div>
-
-            <h3>
-                Tecnología
-            </h3>
-
-            <p>
-                Productos tecnológicos pensados
-                para trabajo, estudio y entretenimiento.
-            </p>
-
-        </article>
-
-
-    </div>
-
-</section>
-
-
-<section class="catalog-cta">
-
-    <div>
-
-        <h2>
-            ¿Listo para encontrar
-            tu próximo producto?
-        </h2>
-
-        <p>
-            Explora nuestro catálogo de hardware
-            y accesorios tecnológicos.
-        </p>
-
-    </div>
-
-
-    <a
-        href="{% url 'product_list' %}"
-        class="btn-primary"
-    >
-        Explorar productos
-    </a>
+    <p>
+        En TechGear encontrarás productos tecnológicos
+        para estudiar, trabajar, jugar y disfrutar
+        de una mejor experiencia digital.
+    </p>
 
 </section>
 

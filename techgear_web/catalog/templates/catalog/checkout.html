@@ -1,8 +1,17 @@
 {% extends "catalog/base.html" %}
-
+{% load static %}
 
 {% block title %}
-    Finalizar pedido | TechGear
+    Checkout | TechGear
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'catalog/css/checkout.css' %}"
+>
+
 {% endblock %}
 
 
@@ -10,216 +19,252 @@
 
 <section class="checkout-page">
 
-
     <div class="checkout-header">
-
-        <span>
-            TECHGEAR STORE
-        </span>
 
         <h1>
             Finalizar pedido
         </h1>
 
         <p>
-            Completa tus datos para realizar tu compra.
+            Completa tus datos para registrar tu pedido.
         </p>
 
     </div>
 
 
-    {% if error %}
-
-        <div class="checkout-error">
-
-            ⚠️
-
-            {{ error }}
-
-        </div>
-
-    {% endif %}
-
-
     <div class="checkout-container">
 
 
-        <!-- ================================= -->
-        <!-- RESUMEN DEL PRODUCTO -->
-        <!-- ================================= -->
+        <!-- =========================
+             FORMULARIO
+        ========================== -->
 
-        <div class="order-summary">
+        <form
+            method="POST"
+            action="{% url 'checkout' %}"
+            class="checkout-form"
+        >
+
+            {% csrf_token %}
+
 
             <h2>
-                Resumen del pedido
+                Información del cliente
             </h2>
 
 
-            <div class="selected-product">
+            <div class="form-grid">
 
-                <div class="selected-icon">
-                    💻
-                </div>
-
-
-                <div>
-
-                    <h3>
-                        {{ nombre_producto }}
-                    </h3>
-
-                    <p>
-                        Producto seleccionado
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="summary-info">
-
-                <div>
-
-                    <span>
-                        Precio unitario
-                    </span>
-
-                    <strong>
-                        ${{ precio }}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        Stock disponible
-                    </span>
-
-                    <strong>
-                        {{ stock }}
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div class="summary-price">
-
-                <span>
-                    Precio
-                </span>
-
-                <strong>
-                    ${{ precio }}
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================================= -->
-        <!-- FORMULARIO -->
-        <!-- ================================= -->
-
-        <div class="checkout-form-container">
-
-            <h2>
-                Datos del pedido
-            </h2>
-
-            <p>
-                Ingresa tu nombre y la cantidad
-                que deseas comprar.
-            </p>
-
-
-            <form
-                method="POST"
-                class="checkout-form"
-            >
-
-                {% csrf_token %}
-
-
-                <!-- ID DEL PRODUCTO -->
-
-                <input
-                    type="hidden"
-                    name="producto_id"
-                    value="{{ producto_id }}"
-                >
-
-
-                <!-- USUARIO -->
 
                 <div class="form-group">
 
-                    <label for="usuario">
-                        Nombre del cliente
+                    <label for="nombre">
+                        Nombre
                     </label>
 
                     <input
                         type="text"
-                        id="usuario"
-                        name="usuario"
-                        value="{{ usuario|default:'' }}"
-                        placeholder="Ingresa tu nombre"
-                        minlength="2"
-                        maxlength="100"
+                        id="nombre"
+                        name="nombre"
                         required
+                        maxlength="50"
+                        value="{{ request.POST.nombre|default:'' }}"
+                        placeholder="Ingresa tu nombre"
                     >
 
                 </div>
 
-
-                <!-- CANTIDAD -->
 
                 <div class="form-group">
 
-                    <label for="cantidad">
-                        Cantidad
+                    <label for="apellido">
+                        Apellido
                     </label>
 
                     <input
-                        type="number"
-                        id="cantidad"
-                        name="cantidad"
-                        value="{{ cantidad|default:'1' }}"
-                        min="1"
-                        {% if stock %}
-                            max="{{ stock }}"
-                        {% endif %}
+                        type="text"
+                        id="apellido"
+                        name="apellido"
                         required
+                        maxlength="50"
+                        value="{{ request.POST.apellido|default:'' }}"
+                        placeholder="Ingresa tu apellido"
                     >
-
-                    {% if stock %}
-
-                        <small>
-                            Stock disponible:
-                            {{ stock }}
-                        </small>
-
-                    {% endif %}
 
                 </div>
 
 
-                <button
-                    type="submit"
-                    class="checkout-button"
-                >
-                    🛒 Confirmar pedido
-                </button>
+                <div class="form-group">
+
+                    <label for="tipo_documento">
+                        Documento
+                    </label>
+
+                    <select
+                        id="tipo_documento"
+                        name="tipo_documento"
+                        required
+                    >
+
+                        <option value="">
+                            Selecciona
+                        </option>
+
+                        <option value="CC">
+                            Cédula de ciudadanía
+                        </option>
+
+                        <option value="TI">
+                            Tarjeta de identidad
+                        </option>
+
+                        <option value="CE">
+                            Cédula de extranjería
+                        </option>
+
+                    </select>
+
+                </div>
 
 
-            </form>
+                <div class="form-group">
 
-        </div>
+                    <label for="numero_documento">
+                        Número de documento
+                    </label>
+
+                    <input
+                        type="text"
+                        id="numero_documento"
+                        name="numero_documento"
+                        required
+                        maxlength="20"
+                        value="{{ request.POST.numero_documento|default:'' }}"
+                        placeholder="Número de documento"
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label for="direccion">
+                        Dirección
+                    </label>
+
+                    <input
+                        type="text"
+                        id="direccion"
+                        name="direccion"
+                        required
+                        maxlength="150"
+                        value="{{ request.POST.direccion|default:'' }}"
+                        placeholder="Dirección de entrega"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="correo">
+                        Correo electrónico
+                    </label>
+
+                    <input
+                        type="email"
+                        id="correo"
+                        name="correo"
+                        required
+                        value="{{ request.POST.correo|default:'' }}"
+                        placeholder="correo@ejemplo.com"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="celular">
+                        Número de celular
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="celular"
+                        name="celular"
+                        required
+                        maxlength="15"
+                        value="{{ request.POST.celular|default:'' }}"
+                        placeholder="3001234567"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-order"
+            >
+                🛒 Confirmar pedido
+            </button>
+
+        </form>
+
+
+        <!-- =========================
+             RESUMEN
+        ========================== -->
+
+        <aside class="checkout-summary">
+
+            <h2>
+                Resumen de compra
+            </h2>
+
+
+            {% for item in cart %}
+
+                <div class="checkout-product">
+
+                    <div class="checkout-product-name">
+                        {{ item.nombre }}
+                    </div>
+
+                    <div class="checkout-product-info">
+
+                        <span>
+                            Cantidad:
+                            {{ item.cantidad }}
+                        </span>
+
+                        <span>
+                            ${{ item.subtotal }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+            <div class="checkout-total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    ${{ total }}
+                </strong>
+
+            </div>
+
+        </aside>
 
     </div>
 

@@ -1,0 +1,54 @@
+.order-success-page { width: min(850px, 92%); margin: 0 auto; padding: 50px 0 80px; }
+
+/* HEADER DE CONFIRMACIÓN */
+.success-header { margin-bottom: 35px; text-align: center; }
+.success-icon { display: flex; align-items: center; justify-content: center; width: 70px; height: 70px; margin: 0 auto 16px; border-radius: 50%; background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80; font-size: 2rem; font-weight: 800; }
+.success-label { color: #00d4ff; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; }
+.success-header h1 { margin: 8px 0 10px; color: #ffffff; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; }
+.success-header p { max-width: 550px; margin: 0 auto; color: #94a3b8; font-size: 0.95rem; line-height: 1.5; }
+
+/* TARJETA CONTENEDORA */
+.order-detail-card { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; background: #111827; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); }
+
+.detail-card-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.detail-card-header span { color: #64748b; font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; }
+.detail-card-header h2 { margin: 4px 0 0; color: #ffffff; font-size: 1.4rem; font-weight: 800; }
+.detail-status { padding: 6px 14px; border-radius: 20px; background: rgba(34, 197, 94, 0.12); color: #4ade80; font-size: 0.78rem; font-weight: 700; }
+
+/* SECCIÓN CLIENTE */
+.customer-section { padding: 25px 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.customer-section h3, .products-section h3 { margin: 0; color: #ffffff; font-size: 1.05rem; font-weight: 700; }
+.customer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 16px; }
+.customer-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.05); }
+.customer-item > span { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: rgba(0, 212, 255, 0.08); font-size: 0.9rem; }
+.customer-item small { display: block; color: #64748b; font-size: 0.7rem; }
+.customer-item strong { display: block; color: #e2e8f0; font-size: 0.85rem; }
+
+/* SECCIÓN PRODUCTOS */
+.products-section { padding: 25px 30px; }
+.section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.section-title span { color: #64748b; font-size: 0.8rem; }
+.order-products-list { display: flex; flex-direction: column; gap: 10px; }
+.detail-product { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 12px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.05); }
+.detail-product-icon { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 10px; background: rgba(0, 212, 255, 0.08); font-size: 1.1rem; }
+.detail-product-info { flex: 1; }
+.detail-product-info h4 { margin: 0 0 2px; color: #ffffff; font-size: 0.9rem; }
+.detail-product-info span { color: #64748b; font-size: 0.75rem; }
+.detail-product-price { color: #00d4ff; font-weight: 700; font-size: 0.95rem; }
+
+/* TOTAL Y BOTONES */
+.total-section { display: flex; justify-content: space-between; align-items: center; margin: 0 30px; padding: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+.total-section span { color: #94a3b8; font-size: 0.9rem; }
+.total-section strong { color: #00d4ff; font-size: 1.5rem; font-weight: 800; }
+
+.order-actions { display: flex; gap: 12px; padding: 20px 30px 30px; }
+.primary-button, .secondary-button { flex: 1; display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; text-decoration: none; transition: all 0.2s ease; }
+.primary-button { background: #00d4ff; color: #06111f; }
+.primary-button:hover { background: #38e4ff; }
+.secondary-button { background: transparent; border: 1px solid rgba(255, 255, 255, 0.12); color: #e2e8f0; }
+.secondary-button:hover { background: rgba(255, 255, 255, 0.05); }
+
+@media (max-width: 600px) {
+  .customer-grid { grid-template-columns: 1fr; }
+  .order-actions { flex-direction: column; }
+}

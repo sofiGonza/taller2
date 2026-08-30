@@ -1,143 +1,122 @@
 {% extends "catalog/base.html" %}
-
+{% load static %}
 
 {% block title %}
-    Carrito | TechGear
+Carrito | TechGear
 {% endblock %}
 
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'catalog/css/cart.css' %}"
+>
+
+{% endblock %}
 
 {% block content %}
 
-<section class="catalog">
+<section class="cart-page">
 
-    <!-- ==========================================
-         ENCABEZADO
-    =========================================== -->
+<div class="cart-header">
 
-    <div class="catalog-header">
+    <h1>
+        🛒 Mi carrito
+    </h1>
 
-        <div>
+    <p>
+        Revisa los productos antes de realizar tu pedido.
+    </p>
 
-            <p class="subtitle">
-                TECHGEAR STORE
-            </p>
-
-            <h1>
-                🛒 Mi carrito
-            </h1>
-
-            <p class="description">
-                Revisa los productos que deseas comprar
-                antes de confirmar tu pedido.
-            </p>
-
-        </div>
+</div>
 
 
-        <div class="product-count">
+{% if carrito %}
 
-            <span>
-                {{ cart|length }}
-            </span>
-
-            productos
-
-        </div>
-
-    </div>
+    <div class="cart-container">
 
 
-    <!-- ==========================================
-         CARRITO CON PRODUCTOS
-    =========================================== -->
+        <!-- ==========================================
+             PRODUCTOS DEL CARRITO
+        =========================================== -->
 
-    {% if cart %}
+        <div class="cart-products">
 
-        <div class="products-grid">
+            {% for item in carrito %}
 
-            {% for product_id, item in cart.items %}
+                <article class="cart-item">
 
-                <article class="product-card">
 
                     <!-- ICONO -->
 
-                    <div class="product-image">
+                    <div class="cart-item-icon">
 
-                        💻
+                        🔧
 
                     </div>
 
 
                     <!-- INFORMACIÓN -->
 
-                    <div class="product-content">
-
-                        <span class="category">
-                            Producto
-                        </span>
-
+                    <div class="cart-item-info">
 
                         <h2>
                             {{ item.nombre }}
                         </h2>
 
+                        <p>
+                            <strong>Precio:</strong>
+                            ${{ item.precio }}
+                        </p>
 
-                        <div class="product-info">
+                        <p>
+                            <strong>Stock disponible:</strong>
+                            {{ item.stock }}
+                        </p>
 
-                            <p>
-                                <strong>
-                                    Precio:
-                                </strong>
-
-                                ${{ item.precio }}
-                            </p>
-
-
-                            <p>
-                                <strong>
-                                    Stock disponible:
-                                </strong>
-
-                                {{ item.stock }}
-                            </p>
+                    </div>
 
 
-                            <p>
-                                <strong>
-                                    Cantidad:
-                                </strong>
+                    <!-- CANTIDAD -->
 
-                                {{ item.cantidad }}
-                            </p>
+                    <div class="cart-quantity">
 
-                        </div>
+                        <span>
+                            {{ item.cantidad }}
+                        </span>
 
+                        <small>
+                            unidad(es)
+                        </small>
 
-                        <!-- SUBTOTAL -->
-
-                        <div class="product-bottom">
-
-                            <div>
-
-                                <span class="price-label">
-                                    Subtotal
-                                </span>
-
-                                <span class="price">
-                                    ${{ item.subtotal }}
-                                </span>
-
-                            </div>
+                    </div>
 
 
-                            <a
-                                href="{% url 'remove_from_cart' product_id %}"
-                                class="remove-button"
-                            >
-                                🗑️ Eliminar
-                            </a>
+                    <!-- SUBTOTAL -->
 
-                        </div>
+                    <div class="cart-item-price">
+
+                        <small>
+                            Subtotal
+                        </small>
+
+                        <strong>
+                            ${{ item.subtotal }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ELIMINAR -->
+
+                    <div>
+
+                        <a
+                            href="{% url 'remove_from_cart' item.product_id %}"
+                            class="remove-button"
+                        >
+                            🗑️
+                        </a>
 
                     </div>
 
@@ -148,29 +127,34 @@
         </div>
 
 
-        <!-- ======================================
-             RESUMEN DEL PEDIDO
-        ======================================= -->
+        <!-- ==========================================
+             RESUMEN
+        =========================================== -->
 
-        <div class="cart-summary">
+        <aside class="cart-summary">
 
-            <div>
+            <h2>
+                Resumen del pedido
+            </h2>
+
+
+            <div class="summary-row">
 
                 <span>
-                    Total de productos
+                    Productos
                 </span>
 
-                <strong>
-                    {{ cart|length }}
-                </strong>
+                <span>
+                    {{ carrito|length }}
+                </span>
 
             </div>
 
 
-            <div>
+            <div class="summary-total">
 
                 <span>
-                    Total a pagar
+                    Total
                 </span>
 
                 <strong>
@@ -179,67 +163,53 @@
 
             </div>
 
-        </div>
-
-
-        <!-- ======================================
-             BOTONES
-        ======================================= -->
-
-        <div class="cart-actions">
-
-            <a
-                href="{% url 'product_list' %}"
-                class="secondary-button"
-            >
-                ← Seguir comprando
-            </a>
-
 
             <a
                 href="{% url 'checkout' %}"
-                class="buy-button"
+                class="checkout-button"
             >
-                Continuar con el pedido →
+                Continuar al checkout
             </a>
 
+        </aside>
+
+    </div>
+
+
+{% else %}
+
+
+    <!-- ==========================================
+         CARRITO VACÍO
+    =========================================== -->
+
+    <div class="empty-cart">
+
+        <div class="empty-cart-icon">
+            🛒
         </div>
 
+        <h2>
+            Tu carrito está vacío
+        </h2>
 
-    {% else %}
+        <p>
+            Agrega productos del catálogo para comenzar
+            tu compra.
+        </p>
 
-        <!-- ======================================
-             CARRITO VACÍO
-        ======================================= -->
+        <a
+            href="{% url 'product_list' %}"
+            class="back-catalog"
+        >
+            Ver catálogo
+        </a>
 
-        <div class="empty">
-
-            <div class="empty-icon">
-                🛒
-            </div>
-
-
-            <h2>
-                Tu carrito está vacío
-            </h2>
-
-
-            <p>
-                Todavía no has agregado productos
-                a tu carrito.
-            </p>
+    </div>
 
 
-            <a
-                href="{% url 'product_list' %}"
-                class="buy-button"
-            >
-                Ver catálogo
-            </a>
+{% endif %}
 
-        </div>
-
-    {% endif %}
 
 </section>
 

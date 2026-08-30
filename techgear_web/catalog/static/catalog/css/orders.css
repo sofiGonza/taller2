@@ -1,0 +1,56 @@
+.orders-page { width: min(1200px, 92%); margin: 0 auto; padding: 50px 0 80px; }
+
+/* ENCABEZADO */
+.orders-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+.orders-subtitle { display: inline-block; margin-bottom: 8px; color: #00d4ff; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; }
+.orders-title h1 { margin: 0; color: #ffffff; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; }
+.orders-title p { margin: 8px 0 0; color: #94a3b8; font-size: 0.95rem; }
+
+.orders-count { min-width: 100px; padding: 15px 20px; border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 16px; background: rgba(15, 23, 42, 0.6); text-align: center; }
+.orders-count span { display: block; color: #00d4ff; font-size: 1.8rem; font-weight: 800; }
+.orders-count small { color: #94a3b8; font-size: 0.8rem; }
+
+/* GRID Y TARJETAS */
+.orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 24px; }
+.order-card { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; background: #111827; overflow: hidden; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
+.order-card:hover { transform: translateY(-4px); border-color: rgba(0, 212, 255, 0.35); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); }
+
+.order-card-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.order-label { color: #64748b; font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; }
+.order-card-header h2 { margin: 4px 0 0; color: #ffffff; font-size: 1.25rem; font-weight: 700; }
+.order-status { padding: 6px 12px; border-radius: 20px; background: rgba(34, 197, 94, 0.12); color: #4ade80; font-size: 0.75rem; font-weight: 700; }
+
+.order-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 24px; }
+.info-item { display: flex; align-items: center; gap: 10px; }
+.info-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; background: rgba(0, 212, 255, 0.08); font-size: 0.95rem; }
+.info-item small { display: block; color: #64748b; font-size: 0.7rem; }
+.info-item strong { display: block; color: #e2e8f0; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.order-total { color: #00d4ff !important; font-weight: 800; }
+
+.order-products { padding: 0 24px 20px; }
+.products-title { display: block; margin-bottom: 8px; color: #64748b; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; }
+.product-preview { display: flex; flex-wrap: wrap; gap: 6px; }
+.product-pill, .product-more { padding: 5px 10px; border-radius: 6px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.06); color: #cbd5e1; font-size: 0.75rem; }
+.product-more { color: #00d4ff; font-weight: 700; }
+
+.order-card-footer { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-top: 1px solid rgba(255, 255, 255, 0.06); background: rgba(15, 23, 42, 0.4); }
+.order-date { color: #64748b; font-size: 0.75rem; }
+.view-order-button { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; background: #00d4ff; color: #06111f; font-size: 0.8rem; font-weight: 700; text-decoration: none; transition: background 0.2s ease, transform 0.2s ease; }
+.view-order-button:hover { background: #38e4ff; transform: translateX(2px); }
+
+/* ESTADOS VACÍOS Y ACCIONES */
+.empty-orders { max-width: 500px; margin: 40px auto; padding: 60px 20px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; background: #111827; text-align: center; }
+.empty-orders-icon { font-size: 3.5rem; margin-bottom: 15px; }
+.empty-orders h2 { color: #ffffff; margin: 0 0 10px; }
+.empty-orders p { color: #94a3b8; margin-bottom: 24px; }
+
+.catalog-button { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 10px; background: #00d4ff; color: #06111f; font-weight: 700; text-decoration: none; transition: all 0.2s ease; }
+.catalog-button.secondary { background: transparent; border: 1px solid rgba(0, 212, 255, 0.3); color: #00d4ff; }
+.catalog-button.secondary:hover { background: rgba(0, 212, 255, 0.1); }
+.orders-bottom { display: flex; justify-content: center; margin-top: 40px; }
+
+@media (max-width: 600px) {
+  .orders-grid { grid-template-columns: 1fr; }
+  .order-info { grid-template-columns: 1fr; }
+  .orders-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+}

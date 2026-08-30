@@ -1,233 +1,98 @@
 {% extends "catalog/base.html" %}
+{% load static %}
 
-{% block title %}
-    Mis pedidos | TechGear
+{% block title %}Mis pedidos | TechGear{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'catalog/css/orders.css' %}">
 {% endblock %}
 
-
 {% block content %}
-
 <section class="orders-page">
+  <div class="orders-header">
+    <div class="orders-title">
+      <span class="orders-subtitle">TECHGEAR STORE</span>
+      <h1>Mis pedidos</h1>
+      <p>Consulta el estado y los detalles de tus pedidos realizados.</p>
+    </div>
+    <div class="orders-count">
+      <span>{{ pedidos|length }}</span>
+      <small>{% if pedidos|length == 1 %}pedido{% else %}pedidos{% endif %}</small>
+    </div>
+  </div>
 
-    <!-- ==========================================
-         ENCABEZADO
-         ========================================== -->
+  {% if not pedidos %}
+    <div class="empty-orders">
+      <div class="empty-orders-icon">📦</div>
+      <h2>Aún no tienes pedidos</h2>
+      <p>Cuando realices una compra, tus pedidos aparecerán aquí.</p>
+      <a href="{% url 'product_list' %}" class="catalog-button">🛒 Ver catálogo</a>
+    </div>
+  {% else %}
+    <div class="orders-grid">
+      {% for pedido in pedidos %}
+        <article class="order-card">
+          <div class="order-card-header">
+            <div>
+              <span class="order-label">PEDIDO</span>
+              <h2>#{{ pedido.id|slice:":8" }}</h2>
+            </div>
+            <span class="order-status status-completed">✓ Realizado</span>
+          </div>
 
-    <div class="orders-header">
+          <div class="order-info">
+            <div class="info-item">
+              <span class="info-icon">👤</span>
+              <div>
+                <small>Cliente</small>
+                <strong>{{ pedido.usuario }}</strong>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">📦</span>
+              <div>
+                <small>Productos</small>
+                <strong>{{ pedido.productos|length }}</strong>
+              </div>
+            </div>
+            {% if pedido.total %}
+              <div class="info-item">
+                <span class="info-icon">💰</span>
+                <div>
+                  <small>Total</small>
+                  <strong class="order-total">${{ pedido.total }}</strong>
+                </div>
+              </div>
+            {% endif %}
+          </div>
 
-        <p class="subtitle">
-            TECHGEAR STORE
-        </p>
+          {% if pedido.productos %}
+            <div class="order-products">
+              <span class="products-title">Productos incluidos</span>
+              <div class="product-preview">
+                {% for producto in pedido.productos|slice:":3" %}
+                  <span class="product-pill">📦 Producto</span>
+                {% endfor %}
+                {% if pedido.productos|length > 3 %}
+                  <span class="product-more">+{{ pedido.productos|length|add:"-3" }}</span>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
 
-        <h1>
-            Mis pedidos
-        </h1>
-
-        <p class="description">
-            Consulta los productos que has comprado,
-            sus cantidades, precios y estado de cada pedido.
-        </p>
-
+          <div class="order-card-footer">
+            <span class="order-date">🛍️ Compra registrada</span>
+            <a href="{% url 'order_detail' pedido.id %}" class="view-order-button">
+              Ver pedido <span>→</span>
+            </a>
+          </div>
+        </article>
+      {% endfor %}
     </div>
 
-
-    <!-- ==========================================
-         SI EXISTEN PEDIDOS
-         ========================================== -->
-
-    {% if orders %}
-
-        <div class="orders-list">
-
-            {% for order in orders %}
-
-                <article class="order-card">
-
-                    <!-- ==================================
-                         ENCABEZADO DEL PEDIDO
-                         ================================== -->
-
-                    <div class="order-card-header">
-
-                        <div>
-
-                            <span class="order-label">
-                                Pedido
-                            </span>
-
-                            <h2>
-                                #{{ order.id }}
-                            </h2>
-
-                        </div>
-
-
-                        <span
-                            class="order-status
-                            {% if order.estado == 'pendiente' %}
-                                pending
-                            {% elif order.estado == 'procesando' %}
-                                processing
-                            {% elif order.estado == 'enviado' %}
-                                shipped
-                            {% elif order.estado == 'entregado' %}
-                                delivered
-                            {% elif order.estado == 'cancelado' %}
-                                cancelled
-                            {% endif %}"
-                        >
-
-                            {{ order.estado|title }}
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- ==================================
-                         CLIENTE
-                         ================================== -->
-
-                    <div class="order-client">
-
-                        <span>
-                            Cliente:
-                        </span>
-
-                        <strong>
-                            {{ order.usuario }}
-                        </strong>
-
-                    </div>
-
-
-                    <!-- ==================================
-                         PRODUCTOS
-                         ================================== -->
-
-                    <div class="order-products">
-
-                        <h3>
-                            Productos
-                        </h3>
-
-
-                        {% for product in order.productos %}
-
-                            <div class="order-product">
-
-                                <div class="order-product-icon">
-                                    🛒
-                                </div>
-
-
-                                <div class="order-product-info">
-
-                                    <h4>
-                                        {{ product.nombre }}
-                                    </h4>
-
-
-                                    <div class="order-product-details">
-
-                                        <span>
-                                            Precio:
-
-                                            <strong>
-                                                ${{ product.precio|floatformat:0 }}
-                                            </strong>
-                                        </span>
-
-
-                                        <span>
-                                            Cantidad:
-
-                                            <strong>
-                                                {{ product.cantidad }}
-                                            </strong>
-                                        </span>
-
-
-                                        <span>
-                                            Subtotal:
-
-                                            <strong>
-                                                ${{ product.subtotal|floatformat:0 }}
-                                            </strong>
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        {% empty %}
-
-                            <p class="no-products">
-                                Este pedido no contiene productos.
-                            </p>
-
-                        {% endfor %}
-
-                    </div>
-
-
-                    <!-- ==================================
-                         TOTAL
-                         ================================== -->
-
-                    <div class="order-card-footer">
-
-                        <span>
-                            Total a pagar
-                        </span>
-
-                        <strong>
-                            ${{ order.total|floatformat:0 }}
-                        </strong>
-
-                    </div>
-
-                </article>
-
-            {% endfor %}
-
-        </div>
-
-
-    <!-- ==========================================
-         NO HAY PEDIDOS
-         ========================================== -->
-
-    {% else %}
-
-        <div class="empty-orders">
-
-            <div class="empty-orders-icon">
-                📦
-            </div>
-
-            <h2>
-                No tienes pedidos todavía
-            </h2>
-
-            <p>
-                Cuando realices una compra,
-                tus pedidos aparecerán aquí.
-            </p>
-
-            <a
-                href="{% url 'product_list' %}"
-                class="orders-button"
-            >
-                🛍️ Ir al catálogo
-            </a>
-
-        </div>
-
-    {% endif %}
-
+    <div class="orders-bottom">
+      <a href="{% url 'product_list' %}" class="catalog-button secondary">← Seguir comprando</a>
+    </div>
+  {% endif %}
 </section>
-
 {% endblock %}

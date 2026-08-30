@@ -1,0 +1,116 @@
+{% extends "catalog/base.html" %}
+{% load static %}
+
+{% block title %}Pedido realizado | TechGear{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'catalog/css/order.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="order-success-page">
+  <div class="success-header">
+    <div class="success-icon">✓</div>
+    <span class="success-label">TECHGEAR STORE</span>
+    <h1>¡Pedido realizado!</h1>
+    <p>Tu pedido ha sido registrado correctamente. Gracias por comprar con nosotros.</p>
+  </div>
+
+  <div class="order-detail-card">
+    <div class="detail-card-header">
+      <div>
+        <span>NÚMERO DE PEDIDO</span>
+        <h2>#{{ pedido.id|slice:":8" }}</h2>
+      </div>
+      <div class="detail-status">✓ Confirmado</div>
+    </div>
+
+    {% if pedido.cliente %}
+      <div class="customer-section">
+        <h3>Información del cliente</h3>
+        <div class="customer-grid">
+          <div class="customer-item">
+            <span>👤</span>
+            <div>
+              <small>Nombre</small>
+              <strong>{{ pedido.cliente.nombre }} {{ pedido.cliente.apellido }}</strong>
+            </div>
+          </div>
+          <div class="customer-item">
+            <span>📧</span>
+            <div>
+              <small>Correo</small>
+              <strong>{{ pedido.cliente.correo }}</strong>
+            </div>
+          </div>
+          <div class="customer-item">
+            <span>📱</span>
+            <div>
+              <small>Celular</small>
+              <strong>{{ pedido.cliente.celular }}</strong>
+            </div>
+          </div>
+          <div class="customer-item">
+            <span>📍</span>
+            <div>
+              <small>Dirección</small>
+              <strong>{{ pedido.cliente.direccion }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="products-section">
+      <div class="section-title">
+        <h3>Productos</h3>
+        <span>
+          {% if pedido.productos_detalle %}
+            {{ pedido.productos_detalle|length }}
+          {% elif pedido.productos %}
+            {{ pedido.productos|length }}
+          {% endif %}
+          productos
+        </span>
+      </div>
+
+      <div class="order-products-list">
+        {% if pedido.productos_detalle %}
+          {% for producto in pedido.productos_detalle %}
+            <div class="detail-product">
+              <div class="detail-product-icon">📦</div>
+              <div class="detail-product-info">
+                <h4>{{ producto.nombre }}</h4>
+                <span>Cantidad: {{ producto.cantidad }}</span>
+              </div>
+              <div class="detail-product-price">${{ producto.precio }}</div>
+            </div>
+          {% endfor %}
+        {% else %}
+          {% for producto in pedido.productos %}
+            <div class="detail-product">
+              <div class="detail-product-icon">📦</div>
+              <div class="detail-product-info">
+                <h4>Producto</h4>
+                <span>Cantidad: {{ producto.cantidad }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    {% if pedido.total %}
+      <div class="total-section">
+        <span>Total del pedido</span>
+        <strong>${{ pedido.total }}</strong>
+      </div>
+    {% endif %}
+
+    <div class="order-actions">
+      <a href="{% url 'order_detail' pedido.id %}" class="primary-button">📄 Ver pedido</a>
+      <a href="{% url 'product_list' %}" class="secondary-button">🛒 Volver al catálogo</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

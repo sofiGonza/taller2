@@ -1,0 +1,363 @@
+
+{% extends "catalog/base.html" %}
+{% load static %}
+
+{% block title %}
+    Administración de productos | TechGear
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.admin-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.admin-header h1 {
+    margin: 0;
+    color: #111827;
+}
+
+.admin-header p {
+    margin-top: 8px;
+    color: #64748b;
+}
+
+.add-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.add-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.products-table-container {
+    background: white;
+    border-radius: 16px;
+    overflow-x: auto;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.products-table th {
+    background: #111827;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.products-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+}
+
+.products-table tr:hover {
+    background: #f8fafc;
+}
+
+.product-name {
+    font-weight: 700;
+    color: #111827;
+}
+
+.category-badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.stock {
+    font-weight: 600;
+}
+
+.stock.available {
+    color: #15803d;
+}
+
+.stock.empty {
+    color: #dc2626;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-button,
+.delete-button {
+    border: none;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.edit-button {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.edit-button:hover {
+    background: #bfdbfe;
+}
+
+.delete-button {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.delete-button:hover {
+    background: #fecaca;
+}
+
+.empty-admin {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-admin-icon {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .products-table th,
+    .products-table td {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="admin-container">
+
+    <div class="admin-header">
+
+        <div>
+
+            <h1>
+                ⚙️ Panel de productos
+            </h1>
+
+            <p>
+                Administra los productos de TechGear.
+                Los cambios se guardan directamente en la base de datos.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'admin_product_create' %}"
+            class="add-button"
+        >
+            ➕ Agregar producto
+        </a>
+
+    </div>
+
+
+    {% if products %}
+
+        <div class="products-table-container">
+
+            <table class="products-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Producto
+                        </th>
+
+                        <th>
+                            Marca
+                        </th>
+
+                        <th>
+                            Categoría
+                        </th>
+
+                        <th>
+                            Precio
+                        </th>
+
+                        <th>
+                            Stock
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for product in products %}
+
+                        <tr>
+
+                            <td>
+
+                                <span class="product-name">
+                                    {{ product.nombre }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                {{ product.marca }}
+                            </td>
+
+
+                            <td>
+
+                                <span class="category-badge">
+                                    {{ product.categoria }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                ${{ product.precio }}
+                            </td>
+
+
+                            <td>
+
+                                {% if product.stock > 0 %}
+
+                                    <span class="stock available">
+                                        {{ product.stock }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="stock empty">
+                                        Agotado
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <a
+                                        href="{% url 'admin_product_edit' product.id %}"
+                                        class="edit-button"
+                                    >
+                                        ✏️ Editar
+                                    </a>
+
+
+                                    <form
+                                        method="POST"
+                                        action="{% url 'admin_product_delete' product.id %}"
+                                        onsubmit="return confirm('¿Está seguro de eliminar este producto?');"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="delete-button"
+                                        >
+                                            🗑️ Eliminar
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-admin">
+
+            <div class="empty-admin-icon">
+                📦
+            </div>
+
+            <h2>
+                No hay productos
+            </h2>
+
+            <p>
+                Todavía no hay productos registrados.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
